@@ -1,0 +1,57 @@
+
+<div class="loginpage-bg-container">
+  <div class="login-form-container">
+    <img
+      src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1652696237/kisspng-e-commerce-computer-icons-shopping-cart-software-o-shopping-cart-5ac7d129bef211.9922103615230446497821_l1nzdt.png"
+      alt="website logo"
+      class="website-logo"
+    />
+    <form class="login-form" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+      <label for="username-input" class="label">
+        USERNAME
+      </label>
+      <input
+        type="text"
+        class="login-input-element"
+        name="username-input"
+        placeholder="Username"
+        required ngModel
+        (change)="onEnterUserName($event)"
+        
+      />
+      <label class="label" for="password-input">
+        PASSWORD
+      </label>
+      <input
+        type={{state.passwordType}}
+        class="login-input-element"
+        name="password-input"
+        placeholder="Password" required ngModel
+        (change)="onEnterPassword($event)"
+      />
+      <div class="show-password-container">
+        <input
+          type="checkbox"
+          class="checkbox-show"
+          name="showPassword"
+          ngModel
+          (change)="onChange($event)"
+        />
+        <label class="label" for="showPassword">
+          Show Password
+        </label>
+      </div>
+      <div class="button-container">
+        <button class="login-button" >
+          Login
+        </button>
+      </div>
+      
+      <p class="error-msg">{{state.errorMsg}}</p>
+      <div class="signup-container">
+        <p class="label">Forgot Password</p>
+        <a class="label" routerLink="signup">Not a member yet.... SignUp! </a>
+      </div>
+    </form>
+  </div>
+</div>

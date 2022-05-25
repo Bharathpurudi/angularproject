@@ -7,7 +7,7 @@
                     First name
                 </label>
                 <input type="text" formControlName="firstName" class="login-input-element" placeholder="Ex: Bharath"
-                    [ngClass]="{ 'is-invalid': submitted && form['firstName'].errors }" [(ngModel)]="customer.firstName" />
+                    [ngClass]="{ 'is-invalid': submitted && form['firstName'].errors }"  />
                 <div *ngIf="submitted && form['firstName'].errors" class="invalid-feedback">
                     <div *ngIf="form['firstName'].errors['required']">First Name is required</div>
                 </div>
@@ -17,7 +17,7 @@
                     Last name
                 </label>
                 <input type="text" formControlName="lastName" class="login-input-element" placeholder="Ex: Purudi"
-                    [ngClass]="{'is-invalid': submitted && form['lastName'].errors }"  [(ngModel)]="customer.lastName"/>
+                    [ngClass]="{'is-invalid': submitted && form['lastName'].errors }"  />
                 <div *ngIf="submitted && form['lastName'].errors" class="invalid-feedback">
                     <div *ngIf="form['lastName'].errors['required']">Last Name is required</div>
                 </div>
@@ -26,15 +26,15 @@
                 <label class="label" for="gender">Gender</label>
                 <div class="gender-container">
                         <div class="form-group">
-                            <input type="radio" value="M" name="gender" id="gender_m" formControlName="gender" [(ngModel)]="customer.gender">
+                            <input type="radio" value="M" name="gender" id="gender_m" formControlName="gender" >
                             <label class="radio-label" for="gender_m">Male</label>
                         </div>
                         <div class="form-group">
-                            <input type="radio" value="F" name="gender" id="gender_f" formControlName="gender" [(ngModel)]="customer.gender">
+                            <input type="radio" value="F" name="gender" id="gender_f" formControlName="gender" >
                             <label class="radio-label" for="gender_f">Female</label>
                         </div>
                         <div class="form-group">
-                            <input type="radio" value="O" name="gender" id="gender_o" formControlName="gender" [(ngModel)]="customer.gender">
+                            <input type="radio" value="O" name="gender" id="gender_o" formControlName="gender" >
                             <label class="radio-label" for="gender_o">Others</label>
                         </div>
                 </div>
@@ -44,7 +44,7 @@
                     User Name
                 </label>
                 <input type="text" class="login-input-element" formControlName="userName" placeholder="Ex: Bharath@239"
-                     [ngClass]="{'is-invalid': submitted && form['userName'].errors }" [(ngModel)]="customer.userName"/>
+                     [ngClass]="{'is-invalid': submitted && form['userName'].errors }" />
                 <div *ngIf="submitted && form['userName'].errors" class="invalid-feedback">
                     <div *ngIf="form['userName'].errors['required']">User name should contain AlphaNumeric and @$!%*?&
                     </div>
@@ -56,7 +56,7 @@
                 </label>
                 <input type="password" formControlName="password" class="login-input-element"
                     placeholder="Use AlphaNum combo" (change)="onEnterPassword($event)" 
-                    [ngClass]="{'is-invalid': submitted && form['password'].errors }" [(ngModel)]="customer.password"/>
+                    [ngClass]="{'is-invalid': submitted && form['password'].errors }" />
                 <div *ngIf="submitted && form['password'].errors" class="invalid-feedback">
                     <div *ngIf="form['password'].errors['required']">Password should contain AlphaNumeric and @$!%*?&
                     </div>
@@ -82,7 +82,7 @@
                 </label>
                 <input type="date" class="login-input-element" formControlName="dateOfBirth" name="Dob-input"
                     min={{formattedMinDate}} max={{formattedMaxDate}}
-                    [ngClass]="{'is-invalid': submitted && form['dateOfBirth'].errors }" [(ngModel)]="customer.dateOfBirth" />
+                    [ngClass]="{'is-invalid': submitted && form['dateOfBirth'].errors }"  />
                 <div *ngIf="submitted&& form['dateOfBirth'].errors" class="invalid-feedback">
                     <div *ngIf="form['dateOfBirth'].errors['required']">DOB is required.</div>
                 </div>
@@ -93,7 +93,7 @@
                 </label>
                 <input type="text" class="login-input-element" formControlName="mobileNum"
                     placeholder="Ex: +91-1234567890"
-                    [ngClass]="{'is-invalid': submitted && form['mobileNum'].errors }" [(ngModel)]="customer.mobileNum" />
+                    [ngClass]="{'is-invalid': submitted && form['mobileNum'].errors }"  />
                 <div *ngIf="submitted&& form['mobileNum'].errors" class="invalid-feedback">
                     <div *ngIf="form['mobileNum'].errors['required']">Mobile Number is required.</div>
                     <div *ngIf="form['mobileNum'].errors['pattern']">Please, Enter 10 digit Mobile Number.</div>
@@ -103,11 +103,11 @@
                 <label class="label">
                     Email Id
                 </label>
-                <input type="email" formControlName="email" class="login-input-element" placeholder="Ex: abc@gmail.com"
-                    required [ngClass]="{'is-invalid': submitted && form['email'].errors }" [(ngModel)]="customer.mailId" />
-                <div *ngIf="submitted && form['email'].errors" class="invalid-feedback">
-                    <div *ngIf="form['email'].errors['required']">Email is required</div>
-                    <div *ngIf="form['email'].errors['email']">Email must be a valid email address</div>
+                <input type="email" formControlName="mailId" class="login-input-element" placeholder="Ex: abc@gmail.com"
+                    required [ngClass]="{'is-invalid': submitted && form['email'].errors }"  />
+                <div *ngIf="submitted && form['mailId'].errors" class="invalid-feedback">
+                    <div *ngIf="form['mailId'].errors['required']">Email is required</div>
+                    <div *ngIf="form['mailId'].errors['email']">Email must be a valid email address</div>
                 </div>
             </div>
             <div class="button-container">

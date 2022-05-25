@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Customer } from 'src/app/EntityModels/Customer';
+import { of } from 'rxjs';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 
 
@@ -14,7 +14,6 @@ import { UserServiceService } from 'src/app/services_folder/userService.service'
 export class UsersignupformComponent implements OnInit {
 
   constructor(private datePipe: DatePipe, private userService: UserServiceService, private router: Router) { }
-  customer: Customer = new Customer();
 
   ngOnInit() {
   }
@@ -32,7 +31,7 @@ export class UsersignupformComponent implements OnInit {
     lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
     gender: new FormControl(''),
     userName: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    mailId: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
     confirmPassword: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
     mobileNum: new FormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],),
@@ -46,8 +45,18 @@ export class UsersignupformComponent implements OnInit {
   confirmPassword: String = "";
   isPasswordMatched: boolean = false;
 
+  myObservable = this.userService.createCustomer(this.signUpForm.value);
+
+  myObserver = {
+    next: (data:any) => console.log(JSON.stringify(this.signUpForm.value)),
+    error: (err: string) => console.error('Observer got an error: ' + err),
+    complete: () => console.log('Observer got a complete notification'),
+  };
+
   save() {
-    this.userService.createCustomer(this.customer).subscribe((data: any) => console.log(data))
+    this.userService.createCustomer(this.signUpForm.value).subscribe(next=>console.log(next),
+    error=>console.error("There is an error"+error))
+    //this.myObservable.subscribe(this.myObserver)
   }
 
   onEnterPassword(e: any) {

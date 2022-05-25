@@ -9,13 +9,10 @@ import { LoginpageComponent } from './components/loginpage/loginpage.component';
 import { UsersignupformComponent } from './components/usersignupform/usersignupform.component';
 import { DatePipe } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
-import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 
-const routes: Routes = [{path:'', component:HomepageComponent},{path: 'login', component: LoginpageComponent },
-{ path: 'signup', component: UsersignupformComponent },
-{path: '**', pathMatch:'full', component:NotFoundComponent}]
+
 
 @NgModule({
   declarations: [
@@ -31,7 +28,6 @@ const routes: Routes = [{path:'', component:HomepageComponent},{path: 'login', c
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(routes),
     HttpClientModule,
   ],
   providers: [DatePipe],

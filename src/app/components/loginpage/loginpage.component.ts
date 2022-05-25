@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { UserServiceService } from 'src/app/services_folder/userService.service';
 
 @Component({
   selector: 'loginpage',
@@ -14,7 +15,7 @@ export class LoginpageComponent implements OnInit {
 
   loginForm = NgForm
 
-  constructor() { }
+  constructor(private userService:UserServiceService) { }
 
   ngOnInit(): void {
   }
@@ -39,6 +40,7 @@ export class LoginpageComponent implements OnInit {
     if(this.state.userName==""&&this.state.password==""){
       this.state.errorMsg="Enter The correct User Credentials"
     }else{
+      this.userService.getCustomer(this.state.userName,this.state.password).subscribe((data:any)=>console.log(data))
       this.state.errorMsg=""
     }
     console.log(loginForm.value)

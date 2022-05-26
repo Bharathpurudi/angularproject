@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Customer } from 'src/app/EntityModels/Customer';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 
 @Component({
@@ -9,41 +11,69 @@ import { UserServiceService } from 'src/app/services_folder/userService.service'
 })
 export class LoginpageComponent implements OnInit {
 
-  state = { userName: "", password: "", passwordType: "password", errorMsg:"" }
+  state = { userName: "", password: "", passwordType: "password", errorMsg: "", isLogin:false}
 
-  userCredentials={}
+  customer: Customer = new Customer;
 
   loginForm = NgForm
 
-  constructor(private userService:UserServiceService) { }
+  constructor(private router: Router, private userService: UserServiceService) { }
 
   ngOnInit(): void {
+
   }
 
-  onEnterUserName(e:any){
-    this.state.userName=e.target.value
+  onEnterUserName(e: any) {
+    this.state.userName = e.target.value
   }
 
-  onEnterPassword(e:any){
-    this.state.password=e.target.value
+  onEnterPassword(e: any) {
+    this.state.password = e.target.value
   }
 
-  onChange(e:any){
-    if(e.target.checked==true){
-      this.state.passwordType="text"
-    }else{
-      this.state.passwordType="password"
+  onChange(e: any) {
+    if (e.target.checked == true) {
+      this.state.passwordType = "text"
+    } else {
+      this.state.passwordType = "password"
     }
   }
+
+  async getCustomerDetails() {
+    this.customer = new Customer();
+    this.userService.getCustomer(this.state.userName, this.state.password).subscribe((data: any) => {
+      console.log(data)
+      this.customer = data;
+      this.validateLogin();
+    }, error => console.log(error)
+    )
+  }
+
+   validateLogin() {
+    if (this.customer.userName === this.state.userName && this.customer.password === this.state.password) {
+      this.gotoHome()
+      this.state.errorMsg = ""
+    } else {
+      this.state.errorMsg = "Wrong Login Credentials"
+    }
+  }
+
+
 
   onSubmit(loginForm: NgForm) {
-    if(this.state.userName==""&&this.state.password==""){
-      this.state.errorMsg="Enter The correct User Credentials"
-    }else{
-      this.userService.getCustomer(this.state.userName,this.state.password).subscribe((data:any)=>console.log(data))
-      this.state.errorMsg=""
+    if (this.state.userName == "" && this.state.password == "") {
+      this.state.errorMsg = "Enter The User Credentials"
+    } else {
+      this.getCustomerDetails();
     }
-    console.log(loginForm.value)
+  }
+
+  gotoHome() {
+    this.router.navigate(['/home']);
+  }
+
+  goToSignUp(){
+    this.router.navigate(['/signup']);
   }
 
 

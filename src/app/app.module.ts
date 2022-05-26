@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 import { HeaderComponent } from './components/header/header.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
+import { UserprofileComponent } from './components/userprofile/userprofile.component';
 
 
 
@@ -22,6 +23,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
     HeaderComponent,
     NotFoundComponent,
     HomepageComponent,
+    UserprofileComponent,
   ],
   imports: [
     BrowserModule,

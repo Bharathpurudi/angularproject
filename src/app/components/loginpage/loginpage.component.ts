@@ -23,14 +23,6 @@ export class LoginpageComponent implements OnInit {
 
   }
 
-  onEnterUserName(e: any) {
-    this.state.userName = e.target.value
-  }
-
-  onEnterPassword(e: any) {
-    this.state.password = e.target.value
-  }
-
   onChange(e: any) {
     if (e.target.checked == true) {
       this.state.passwordType = "text"
@@ -38,6 +30,13 @@ export class LoginpageComponent implements OnInit {
       this.state.passwordType = "password"
     }
   }
+
+  myObservable=this.userService.getCustomer(this.state.userName, this.state.password)
+  myObserver = {
+    next: (data: any) => {console.log(data),this.customer=data,this.validateLogin()},
+    error: (err: string) => console.error('Observer got an error: ' + err),
+    complete: () => console.log('Observer got a complete notification'),
+  };
 
   async getCustomerDetails() {
     this.customer = new Customer();
@@ -57,8 +56,6 @@ export class LoginpageComponent implements OnInit {
       this.state.errorMsg = "Wrong Login Credentials"
     }
   }
-
-
 
   onSubmit(loginForm: NgForm) {
     if (this.state.userName == "" && this.state.password == "") {

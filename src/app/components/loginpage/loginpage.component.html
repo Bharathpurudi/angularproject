@@ -15,8 +15,7 @@
         class="login-input-element"
         name="username-input"
         placeholder="Username"
-        required ngModel
-        (change)="onEnterUserName($event)"
+        required [(ngModel)] = "state.userName"
         
       />
       <label class="label" for="password-input">
@@ -26,8 +25,7 @@
         type={{state.passwordType}}
         class="login-input-element"
         name="password-input"
-        placeholder="Password" required ngModel
-        (change)="onEnterPassword($event)"
+        placeholder="Password" required [(ngModel)] = "state.password"
       />
       <div class="show-password-container">
         <input

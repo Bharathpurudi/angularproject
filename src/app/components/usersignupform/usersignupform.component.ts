@@ -17,6 +17,10 @@ export class UsersignupformComponent implements OnInit {
 
   ngOnInit() {
   }
+  submitted: boolean = false;
+  password: String = "";
+  confirmPassword: String = "";
+  isPasswordMatched: boolean = false;
 
   currentDate = new Date();
   minDateRaw = new Date().setDate(this.currentDate.getDate() - 36500);
@@ -40,22 +44,18 @@ export class UsersignupformComponent implements OnInit {
 
   );
 
-  submitted: boolean = false;
-  password: String = "";
-  confirmPassword: String = "";
-  isPasswordMatched: boolean = false;
 
   myObservable = this.userService.createCustomer(this.signUpForm.value);
 
   myObserver = {
-    next: (data:any) => console.log(JSON.stringify(this.signUpForm.value)),
+    next: (data: any) => console.log(JSON.stringify(this.signUpForm.value)),
     error: (err: string) => console.error('Observer got an error: ' + err),
     complete: () => console.log('Observer got a complete notification'),
   };
 
   save() {
-    this.userService.createCustomer(this.signUpForm.value).subscribe(next=>console.log(next),
-    error=>console.error("There is an error"+error))
+    this.userService.createCustomer(this.signUpForm.value).subscribe(next => console.log(next),
+      error => console.error("There is an error" + error))
     //this.myObservable.subscribe(this.myObserver)
   }
 
@@ -74,8 +74,6 @@ export class UsersignupformComponent implements OnInit {
     } else {
       this.isPasswordMatched = false
     }
-
-
   }
 
   get form() {

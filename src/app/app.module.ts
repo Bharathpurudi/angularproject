@@ -12,6 +12,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { UserprofileComponent } from './components/userprofile/userprofile.component';
+import { ComponentStore } from '@ngrx/component-store';
 
 
 
@@ -32,7 +33,7 @@ import { UserprofileComponent } from './components/userprofile/userprofile.compo
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, ComponentStore],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

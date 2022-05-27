@@ -1,6 +1,6 @@
 <nav class="header-container">
     <ul class="tabs-container">
-        <li key="logo-home">
+        <li key="logo-home" (click)="homePage">
           <img
             src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1652696237/kisspng-e-commerce-computer-icons-shopping-cart-software-o-shopping-cart-5ac7d129bef211.9922103615230446497821_l1nzdt.png"
             alt="website logo"
@@ -11,7 +11,7 @@
           <input type="search" class="search-input-element" placeholder="Search your Intrest..">
         </li>
       <div class="home-jobs-container">
-          <li key="home" class="tab-item" routerLink="">
+          <li key="home" class="tab-item" (click)="homePage">
             Home
           </li>
           <li key="job" class="tab-item">

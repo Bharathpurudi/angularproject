@@ -1,0 +1,8 @@
+.specific-product-bg-container{
+    background-color: #1c1a1a;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}

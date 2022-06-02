@@ -23,11 +23,13 @@
       </div>
       <div class="categories-container">
         <ul class="categories-list" *ngFor="let category of catogoriesList">
-          <li class="category-list-element">
+          <li class="category-list-element" (click)="clickOnCategory(category.catName)">
             <img src={{category.catUrl}} class="cat-image" />
            <p class="cat-item-name ">{{category.catName}}</p>
           </li>
         </ul>
-      </div>
-      
-</div>
+      </div>     
+</div> 
+
+
+

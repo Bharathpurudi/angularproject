@@ -54,9 +54,7 @@ export class UsersignupformComponent implements OnInit {
   };
 
   save() {
-    this.userService.createCustomer(this.signUpForm.value).subscribe(next => console.log(next),
-      error => console.error("There is an error" + error))
-    //this.myObservable.subscribe(this.myObserver)
+    this.userService.createCustomer(this.signUpForm.value).subscribe((data:any)=>{console.log(data)})
   }
 
   onEnterPassword(e: any) {

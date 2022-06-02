@@ -104,7 +104,7 @@
                     Email Id
                 </label>
                 <input type="email" formControlName="mailId" class="login-input-element" placeholder="Ex: abc@gmail.com"
-                    required [ngClass]="{'is-invalid': submitted && form['email'].errors }"  />
+                    required [ngClass]="{'is-invalid': submitted && form['mailId'].errors }"  />
                 <div *ngIf="submitted && form['mailId'].errors" class="invalid-feedback">
                     <div *ngIf="form['mailId'].errors['required']">Email is required</div>
                     <div *ngIf="form['mailId'].errors['email']">Email must be a valid email address</div>

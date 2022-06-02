@@ -41,7 +41,7 @@ export class LoginpageComponent implements OnInit {
   async getCustomerDetails() {
     this.customer = new Customer();
     this.userService.getCustomer(this.state.userName, this.state.password).subscribe((data: any) => {
-      console.log(data)
+      console.log(data);
       this.customer = data;
       this.validateLogin();
     }, error => console.log(error)

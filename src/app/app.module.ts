@@ -13,6 +13,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { UserprofileComponent } from './components/userprofile/userprofile.component';
 import { ComponentStore } from '@ngrx/component-store';
+import { CategoryProductsComponent } from './components/category-products/category-products.component';
+import { CartComponent } from './components/cart/cart.component';
+import { StoreserviceService } from './services_folder/storeservice.service';
+import { ProductServiceService } from './services_folder/product-service.service';
+import { SpecificproductComponent } from './components/specificproduct/specificproduct.component';
 
 
 
@@ -25,6 +30,9 @@ import { ComponentStore } from '@ngrx/component-store';
     NotFoundComponent,
     HomepageComponent,
     UserprofileComponent,
+    CategoryProductsComponent,
+    CartComponent,
+    SpecificproductComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,7 +41,7 @@ import { ComponentStore } from '@ngrx/component-store';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [DatePipe, ComponentStore],
+  providers: [DatePipe, ComponentStore,StoreserviceService,ProductServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

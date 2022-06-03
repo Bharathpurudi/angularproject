@@ -18,6 +18,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { StoreserviceService } from './services_folder/storeservice.service';
 import { ProductServiceService } from './services_folder/product-service.service';
 import { SpecificproductComponent } from './components/specificproduct/specificproduct.component';
+import { StoreModule } from '@ngrx/store';
+import { cartReducer, metaReducerLocalStorage } from './cart-state-store/cart.reducer';
 
 
 
@@ -40,6 +42,7 @@ import { SpecificproductComponent } from './components/specificproduct/specificp
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    StoreModule.forRoot({cartEntries:cartReducer}, {metaReducers:[metaReducerLocalStorage]}),
   ],
   providers: [DatePipe, ComponentStore,StoreserviceService,ProductServiceService],
   bootstrap: [AppComponent]

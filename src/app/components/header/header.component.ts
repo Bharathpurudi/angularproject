@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { productsCount } from 'src/app/cart-state-store/cart.selector';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
 import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
 
@@ -10,8 +13,10 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private router: Router, private storeService:StoreserviceService, private productsService:ProductServiceService) { }
-
+  countProducts$:Observable<number>;
+  constructor(private router: Router, private storeService:StoreserviceService, private productsService:ProductServiceService, private store:Store) {
+    this.countProducts$=store.select(productsCount)
+   }
   categoriesArray:string[]=["Electronics","Grocery","Fashion","Appliances","Beauty","Furniture"];
 
   ngOnInit(): void {
@@ -21,10 +26,14 @@ export class HeaderComponent implements OnInit {
 
   logoutFunction(){
     this.router.navigate(['/login']);
+    window.localStorage.clear();
   }
 
   homePage(){
     this.router.navigate(['/home']);
+  }
+  goToCart(){
+    this.router.navigate(['/cart']);
   }
 
   productsPage(){

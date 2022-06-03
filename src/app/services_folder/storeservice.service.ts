@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Customer } from '../EntityModels/Customer';
+import { Product } from '../EntityModels/Product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StoreserviceService {
+  constructor(){
+    this._myVariable = "exampletest";
+  }
 
   public _myVariable: string;
 
@@ -12,9 +16,11 @@ export class StoreserviceService {
 
   public customerDetails = new Customer();
 
-  private productDetails:object={};
+  private productDetails= new Product();
 
   private productsList: object[] = [];
+
+  private cartAddedItems:Product[]=[];
 
   setCustomer(customer:Customer){
     this.customerDetails=customer
@@ -32,7 +38,7 @@ setMyVariable(newValue: any){
    this._myVariable = newValue;
 }
 
-setProduct(product:object){
+setProduct(product:Product){
   this.productDetails=product;
 }
 
@@ -56,8 +62,14 @@ getProductsList(){
   return this.productsList;
 }
 
-constructor(){
-  this._myVariable = "exampletest";
+setCartProducts(value:Product){
+  this.cartAddedItems.push(value);
 }
+
+getCartAddedItems(){
+  return this.cartAddedItems;
+}
+
+
 
 }

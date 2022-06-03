@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CartComponent } from './components/cart/cart.component';
 import { CategoryProductsComponent } from './components/category-products/category-products.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { LoginpageComponent } from './components/loginpage/loginpage.component';
@@ -13,6 +14,7 @@ const routes: Routes = [{ path: '', redirectTo: 'login', pathMatch: 'full' },
 { path: 'signup', component: UsersignupformComponent },
 {path:'products',component:CategoryProductsComponent},
 {path:'specificproduct',component:SpecificproductComponent},
+{path:'cart',component:CartComponent},
 { path: '**', pathMatch: 'full', component: NotFoundComponent },
 ]
 

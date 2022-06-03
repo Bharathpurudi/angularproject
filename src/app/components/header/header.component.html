@@ -12,14 +12,15 @@
             <input type="search" class="search-input-element" placeholder="Search your Intrest.." (change)="onSearch($event)">
           </li>
         </form>
-      <div class="home-jobs-container">
+      <div class="home-cart-container">
           <li key="home" class="tab-item" (click)="homePage()">
             Home
           </li>
-          <li key="job" class="tab-item">
+          <li key="job" class="tab-item-1" (click)="goToCart()">
             <i class="bi bi-cart-fill"></i>
             Cart
           </li>
+          <li class="tab-item-2">{{countProducts$ | async}}</li>
       </div>
         <li key="profile" class="profile-icon">
           <img

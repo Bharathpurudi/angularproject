@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
+import { Product } from 'src/app/EntityModels/Product';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
 import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
 
@@ -15,10 +16,12 @@ export class CategoryProductsComponent implements OnInit {
     this.productsFound=storeService.getProductsFoundVar();
   }
 
-  currentProduct:object={};
+  currentProduct :Product= new Product();
+  tempProdList:Product[]=[];
 
   ngOnInit(): void {
     this.renderProducts(this.category)
+    this.productsFound=this.storeService.getProductsFoundVar();
   }
 
   category:string='';
@@ -27,7 +30,7 @@ export class CategoryProductsComponent implements OnInit {
 
   renderProducts(category:string){
     if(this.productsFound===true){
-      this.productService.getProducts(category).subscribe((data:any)=>{this.productsList=data,console.log(data)})
+      this.productService.getProducts(category).subscribe((data:any)=>{this.productsList=data})
     }else{
       this.productsList=this.storeService.getProductsList();
     }
@@ -35,7 +38,8 @@ export class CategoryProductsComponent implements OnInit {
   }
 
   specificProduct(productName:string){
-    this.currentProduct=this.productsList.filter((product: { productName: string; })=>product.productName===productName)
+    this.tempProdList=this.productsList.filter((product: { productName: string; })=>product.productName===productName)
+    this.currentProduct=this.tempProdList[0];
     this.storeService.setProduct(this.currentProduct);
     this.router.navigate(['/specificproduct'])
   }

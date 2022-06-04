@@ -47,10 +47,11 @@
 }
 .product-rating{
     font-family: sans-serif;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 500;
     color: #ffffff;
     text-align: start;
+    margin-right: 10px;
 }
 .add-cart-container{
     display: flex;
@@ -111,4 +112,23 @@
     font-weight: 500;
     color: #ffffff;
     text-align: start;
+}
+.crop {
+    overflow: hidden;
+  }
+.star-color{
+    color: #ffffff;
+    font-size: 20px;
+    margin-right: 2px;
+    margin-bottom: 0;
+    padding-top: 6px;
+
+  }
+.rating-container{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    height: 25px;
+    margin-bottom: 20px;
 }

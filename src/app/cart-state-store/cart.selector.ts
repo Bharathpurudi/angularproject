@@ -16,17 +16,6 @@ export const productsCount=createSelector(
 export const selectGroupedCartEntries = createSelector(
     createFeatureSelector('cartEntries'),
     (state: Product[]) => {
-      var map: Map<number, ProductGroup> = new Map;
-  
-      state.forEach(p => {
-        if (map.get(p.productId)) {
-          (map.get(p.productId) as ProductGroup).count++;
-        } else {
-          map.set(p.productId, { product: p, count: 1 });
-        }
-      })
-  
-      const sortedMap = new Map([...map.entries()].sort());
-      return Array.from(sortedMap.values());
+      return [...state]
     }
   )

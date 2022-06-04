@@ -5,7 +5,18 @@
         <img src={{product.imageUrl}} class="specific-image" alt={{product.productName}}/>
         <div class="title-rating-container">
             <h1 class="product-title">{{product.productName}}</h1>
-            <p class="product-rating">Rating: 4.5</p>
+            <div class="rating-container">
+                <p class="product-rating">Rating: </p>
+                <div class="crop" [style.width.px]="5*20">
+                    <div style="width: 120px">
+                        <span class="fa fa-star star-color"></span>
+                        <span class="fa fa-star star-color"></span>
+                        <span class="fa fa-star star-color"></span>
+                        <span class="fa fa-star star-color"></span>
+                        <span class="fa fa-star star-color"></span>
+                    </div>
+                </div>
+            </div>
             <h1 class="description">Description: <span class="product-description">{{product.imageUrl}}</span></h1>
             <div class="add-cart-container">
                 <button class="add-cart-button" (click)="addToCart()">Add to Cart</button>

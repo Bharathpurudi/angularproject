@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -16,10 +17,18 @@ export class SpecificproductComponent implements OnInit {
   product :Product = new Product();
   validatingProduct:Product=new Product();
   quantity:number=0;
+  currentDate:string|null="";
 
- 
-  constructor(private storeService:StoreserviceService, private store: Store) {
-    this.getTheProduct()
+  constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe) {
+    this.getTheProduct();
+    this.currentDate=this.getCurrentDate()
+  }
+
+  getCurrentDate(){
+  const now = new Date();
+  now.setDate(now.getDate()-30);
+  const modifiedDate = this.datepipe.transform(now, 'yyyy-MM-dd')
+  return modifiedDate;
   }
 
   ngOnInit(): void {
@@ -35,9 +44,12 @@ export class SpecificproductComponent implements OnInit {
   }
 
   addToCart(){
+    if(this.product.productDoe===this.currentDate){
+    }
     this.storeService.setCartProducts(this.product)
     this.store.dispatch(addProduct(this.product))
     this.store.select(selectGroupedCartEntries).subscribe((data:any)=>(console.log(data)))
+    console.log(this.currentDate)
   }
 
 }

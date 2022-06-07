@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { addProduct } from 'src/app/cart-state-store/cart.actions';
@@ -16,19 +17,28 @@ export class SpecificproductComponent implements OnInit {
 
   product :Product = new Product();
   validatingProduct:Product=new Product();
-  quantity:number=0;
-  currentDate:string|null="";
+  productExpireDate:Date;
+  referenceDate:Date;
+  currentDate:Date;
+  productAdded:boolean=false;
+  productExpired:boolean=false;
 
-  constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe) {
+  constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe, private router:Router) {
     this.getTheProduct();
-    this.currentDate=this.getCurrentDate()
+    this.productExpireDate=this.getProductExpireDate()
+    this.referenceDate=this.getRefDate();
+    this.currentDate=new Date();
   }
 
-  getCurrentDate(){
-  const now = new Date();
-  now.setDate(now.getDate()-30);
-  const modifiedDate = this.datepipe.transform(now, 'yyyy-MM-dd')
-  return modifiedDate;
+  getProductExpireDate(){
+    const productExpDate= new Date(this.product.productDoe)
+    return productExpDate;
+  }
+
+  getRefDate(){
+    const now = new Date();
+    now.setDate(now.getDate()-30);
+    return now;
   }
 
   ngOnInit(): void {
@@ -39,17 +49,20 @@ export class SpecificproductComponent implements OnInit {
     this.product=this.storeService.getProduct();
   }
 
-  updateQuantity(e:any){
-    this.quantity=e.target.value
+  goToCart(){
+    this.router.navigate(['/cart']);
   }
 
   addToCart(){
-    if(this.product.productDoe===this.currentDate){
-    }
+    if(this.productExpireDate>this.referenceDate && this.productExpireDate<this.currentDate){
+      this.productExpired=true;
+      alert("Product is near to expire date")
+    }else{
+    this.productAdded=true;
     this.storeService.setCartProducts(this.product)
     this.store.dispatch(addProduct(this.product))
     this.store.select(selectGroupedCartEntries).subscribe((data:any)=>(console.log(data)))
-    console.log(this.currentDate)
+    }
   }
 
 }

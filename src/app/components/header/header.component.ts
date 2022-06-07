@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { productsCount } from 'src/app/cart-state-store/cart.selector';
+import { removeCustomer } from 'src/app/customer-state-store/customer.action';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
 import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
 
@@ -26,6 +27,7 @@ export class HeaderComponent implements OnInit {
 
   logoutFunction(){
     this.router.navigate(['/login']);
+    this.store.dispatch(removeCustomer())
     window.localStorage.clear();
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { createCustomer } from 'src/app/customer-state-store/customer.action';
 import { Customer } from 'src/app/EntityModels/Customer';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 
@@ -17,10 +19,9 @@ export class LoginpageComponent implements OnInit {
 
   loginForm = NgForm
 
-  constructor(private router: Router, private userService: UserServiceService) { }
+  constructor(private router: Router, private userService: UserServiceService, private store:Store) { }
 
   ngOnInit(): void {
-
   }
 
   onChange(e: any) {
@@ -31,25 +32,23 @@ export class LoginpageComponent implements OnInit {
     }
   }
 
-  myObservable=this.userService.getCustomer(this.state.userName, this.state.password)
-  myObserver = {
-    next: (data: any) => {console.log(data),this.customer=data,this.validateLogin()},
-    error: (err: string) => console.error('Observer got an error: ' + err),
-    complete: () => console.log('Observer got a complete notification'),
+
+  customerStateSet(){
+    this.store.dispatch(createCustomer(this.customer))
   };
 
-  async getCustomerDetails() {
+  getCustomerDetails() {
     this.customer = new Customer();
     this.userService.getCustomer(this.state.userName, this.state.password).subscribe((data: any) => {
-      console.log(data);
-      this.customer = data;
-      this.validateLogin();
-    }, error => console.log(error)
+      this.customer=data,
+      this.validateLogin()
+    }
     )
   }
 
    validateLogin() {
     if (this.customer.userName === this.state.userName && this.customer.password === this.state.password) {
+      this.customerStateSet();
       this.gotoHome()
       this.state.errorMsg = ""
     } else {

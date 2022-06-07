@@ -1,8 +1,11 @@
+import { state } from "@angular/animations";
 import { ActionReducer, createReducer,INIT,on, UPDATE } from "@ngrx/store";
 import { Product } from "../EntityModels/Product";
-import { addProduct,removeProduct,clearCart, getProducts} from "./cart.actions";
+import { addProduct,removeProduct,clearCart, cartId} from "./cart.actions";
 
 export const initialCartProducts:Product[]=[];
+
+export const initialCartId:Number=0;
 
 export const cartReducer=createReducer(
 initialCartProducts,
@@ -11,20 +14,32 @@ on(clearCart, _ =>[]),
 
 
 on(addProduct,(entries,product)=>{
-    const entriesClone:Product[]=JSON.parse(JSON.stringify(entries))
-    entriesClone.push(product)
-    return entriesClone;
+    const addedProducts:Product[]=JSON.parse(JSON.stringify(entries))
+    addedProducts.push(product)
+    return addedProducts;
 }),
 
 on(removeProduct,(entries,product)=>{
-    const entriesClone:Product[]=JSON.parse(JSON.stringify(entries))
-    const found=entriesClone.find(e=>e.productId===product.productId)
+    const addedProducts:Product[]=JSON.parse(JSON.stringify(entries))
+    const found=addedProducts.find(e=>e.productId===product.productId)
     if(found){
-        entriesClone.splice(entriesClone.indexOf(found),1)
+      addedProducts.splice(addedProducts.indexOf(found),1)
     }
-    return entriesClone;
-    
+    return addedProducts;
 })
+)
+
+export const cartIdReducer=createReducer(
+  initialCartId,
+  on(cartId,(entry,number)=>
+  {let num=entry;
+    num=number;
+    return num;
+  })
+
+
+
+  
 )
 
 

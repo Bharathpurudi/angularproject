@@ -18,8 +18,4 @@ export class ProductServiceService {
   getProductsLike(category:string):Observable<any>{
     return this.http.get(`${this.baseUrl}/getAllProductsLike/${category}`)
   }
-
-  /* updateQuantity({}):Observable<any>{
-    return this.http.put(`${this.baseUrl}/updatequantity`,value)
-  } */
 }

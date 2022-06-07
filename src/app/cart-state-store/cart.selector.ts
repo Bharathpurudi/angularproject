@@ -19,3 +19,10 @@ export const selectGroupedCartEntries = createSelector(
       return [...state]
     }
   )
+
+export const selectCartId=createSelector(
+  createFeatureSelector('cartIdEntry'),
+  (state:Number)=>{
+    return state;
+  }
+)

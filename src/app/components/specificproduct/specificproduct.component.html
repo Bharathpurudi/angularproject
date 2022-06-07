@@ -19,11 +19,8 @@
             </div>
             <h1 class="description">Description: <span class="product-description">{{product.imageUrl}}</span></h1>
             <div class="add-cart-container">
-                <button class="add-cart-button" (click)="addToCart()">Add to Cart</button>
-                <div>
-                <label for="product-quantity" class="product-quantity">Qty</label>
-                <input type="number" class="quantity" id="product-quantity" value="1" min="1" max="10" (change)="updateQuantity($event)">
-                </div>
+                <button class="add-cart-button" [hidden]="productAdded" (click)="addToCart()">Add to Cart</button>
+                <button class="add-cart-button" [hidden]="!productAdded" (click)="goToCart()">Go to Cart</button>
             </div>
         </div>
         <div class="product-image-title-container">

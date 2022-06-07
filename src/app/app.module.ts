@@ -19,8 +19,9 @@ import { StoreserviceService } from './services_folder/storeservice.service';
 import { ProductServiceService } from './services_folder/product-service.service';
 import { SpecificproductComponent } from './components/specificproduct/specificproduct.component';
 import { StoreModule } from '@ngrx/store';
-import { cartReducer, metaReducerLocalStorage } from './cart-state-store/cart.reducer';
+import { cartIdReducer, cartReducer, metaReducerLocalStorage } from './cart-state-store/cart.reducer';
 import { StarRatingModule } from 'angular-rating-star';
+import { customerReducer } from './customer-state-store/customer.reducer';
 
 
 
@@ -43,7 +44,7 @@ import { StarRatingModule } from 'angular-rating-star';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({cartEntries:cartReducer}, {metaReducers:[metaReducerLocalStorage]}),
+    StoreModule.forRoot({cartEntries:cartReducer , customerEntries:customerReducer, cartIdEntry:cartIdReducer}, {metaReducers:[metaReducerLocalStorage]}),
     StarRatingModule
   ],
   providers: [DatePipe, ComponentStore,StoreserviceService,ProductServiceService],

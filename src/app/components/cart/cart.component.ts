@@ -2,15 +2,16 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { cartId } from 'src/app/cart-state-store/cart.actions';
-import { selectCartId, selectGroupedCartEntries } from 'src/app/cart-state-store/cart.selector';
+import { cartId, removeProduct } from 'src/app/cart-state-store/cart.actions';
+import { productsCount, selectCartId, selectGroupedCartEntries } from 'src/app/cart-state-store/cart.selector';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Cart } from 'src/app/EntityModels/Cart';
 import { Customer } from 'src/app/EntityModels/Customer';
-import { orderEntity } from 'src/app/EntityModels/orderEntity';
-import { orderProducts } from 'src/app/EntityModels/orderProducts';
+import { OrderEntity} from 'src/app/EntityModels/OrderEntity';
+import { OrderProducts } from 'src/app/EntityModels/OrderProducts';
 import { Product } from 'src/app/EntityModels/Product';
 import { CartserviceService } from 'src/app/services_folder/cartservice.service';
+import { ProductServiceService } from 'src/app/services_folder/product-service.service';
 
 @Component({
   selector: 'app-cart',
@@ -19,7 +20,7 @@ import { CartserviceService } from 'src/app/services_folder/cartservice.service'
 })
 export class CartComponent implements OnInit {
 
-  constructor(private store: Store, private cartService:CartserviceService) {
+  constructor(private store: Store, private cartService:CartserviceService, private productService:ProductServiceService) {
     this.store.select(selectGroupedCartEntries).subscribe({
       next:(data)=>this.cartProducts=data
     })
@@ -29,35 +30,51 @@ export class CartComponent implements OnInit {
     this.cartService.getcartId(this.custId).subscribe({
       next:(data)=>this.cartId=data
     })
+    this.store.select(productsCount).subscribe({
+      next:(data:any)=>this.lengthOfCartProducts=data
+    })
 
     this.orderDate= this.getTodayDate()
     this.orderAmount=this.getOrderAmount()
     this.checkoutAmount=this.orderAmount-this.orderDiscount
+    this.orderProductsList=this.getOrderProducts();
+    console.log(this.orderProductsList)
+    this.invoiceNum=this.invoiceNum+1
+    this.validateProducts()
     
    }
+
+   ngOnInit(): void {
+    }
+
   cartProducts:Product[]=[];
   custId:number=0;
   cartId:number=0;
-  cart:Cart=new Cart;
-  orderEntity:orderEntity=new orderEntity;
-  orderProducts:orderProducts=new orderProducts;
+  orderProductsList:OrderProducts[]=[];
   checkoutAmount:number= 0;
-  invoiceNum:number= 0;
+  invoiceNum:number= 1010;
   orderAmount:number= 0;
   orderDate:string|null="";
-  orderDiscount:number= 500;
+  orderDiscount:number= 50;
+  isCartHavingItems:boolean=true;
+  lengthOfCartProducts:number=0;
 
   getOrderAmount(){
     let amount=0;
-this.cartProducts.forEach(element => {
+    this.cartProducts.forEach(element => {
       amount+=element.productPrice
     });
     return amount;
   }
 
-  ngOnInit(): void {
-
+  getOrderProducts(){
+    const orderProducts:OrderProducts[]=[];
+    this.cartProducts.forEach(element => {
+      orderProducts.push(new OrderProducts(0,element.productId,0))
+    });
+    return orderProducts;
   }
+
 
   getTodayDate(){
     var datePipe = new DatePipe('en-US');
@@ -66,6 +83,61 @@ this.cartProducts.forEach(element => {
     return modifiedDate;
   }
 
-  
+  onRemoveProduct(id:number){
+    this.cartProducts.forEach(e=>{
+      if(e.productId===id){
+        this.store.dispatch(removeProduct(e))
+      }
+    })
+    this.validateProducts();
+
+  }
+
+  validateProducts(){
+    if(this.lengthOfCartProducts>0){
+      this.isCartHavingItems=false
+    }
+  }
+
+  updateTheProductsQuantity(productId:number, e:any){
+    this.orderProductsList.forEach(element => {
+      if(element.productId===productId){
+        element.quantity=e.target.value;
+      }
+    });
+  }
+
+  reduceQuantitySupport(id:number):number{
+  let retQuantity:number=0;
+  this.orderProductsList.forEach(element => {
+      if(element.productId===id){
+        retQuantity=element.quantity
+      }
+    });
+    return retQuantity;
+  }
+
+  reduceQuantity(){
+  let copyProducts:Product[]=[...this.cartProducts]
+   copyProducts.forEach(element => {
+     let product=new Product;
+     product=element,
+     product.stockQuantity=(product.stockQuantity-this.reduceQuantitySupport(product.productId)),
+     this.productService.createProduct(product).subscribe((data:any)=>console.log(data))
+    });
+  }
+
+  checkOut(){
+    this.reduceQuantity();
+    const checkOutOrder:OrderEntity[]=[];
+    checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList))
+    const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)
+    this.cartService.createCart(checkoutCart).subscribe(
+      {
+        next:(data:any)=>console.log(data)
+      }
+    )
+  }
+
 
 }

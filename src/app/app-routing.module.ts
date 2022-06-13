@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthenticateGuardGuard } from './auth_guards/authenticate-guard.guard';
 import { CartComponent } from './components/cart/cart.component';
 import { CategoryProductsComponent } from './components/category-products/category-products.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
@@ -9,12 +10,16 @@ import { SpecificproductComponent } from './components/specificproduct/specificp
 import { UsersignupformComponent } from './components/usersignupform/usersignupform.component';
 
 const routes: Routes = [{ path: '', redirectTo: 'login', pathMatch: 'full' },
- { path: 'home', component: HomepageComponent },
-  { path: 'login', component: LoginpageComponent },
+ { path: 'home', component: HomepageComponent,
+canActivate:[AuthenticateGuardGuard] },
+  { path: 'login', component: LoginpageComponent},
 { path: 'signup', component: UsersignupformComponent },
-{path:'products',component:CategoryProductsComponent},
-{path:'specificproduct',component:SpecificproductComponent},
-{path:'cart',component:CartComponent},
+{path:'products',component:CategoryProductsComponent,
+canActivate:[AuthenticateGuardGuard]},
+{path:'specificproduct',component:SpecificproductComponent,
+canActivate:[AuthenticateGuardGuard]},
+{path:'cart',component:CartComponent,
+canActivate:[AuthenticateGuardGuard]},
 { path: '**', pathMatch: 'full', component: NotFoundComponent },
 ]
 

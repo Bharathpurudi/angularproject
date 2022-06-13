@@ -1,9 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
+import { Customer } from 'src/app/EntityModels/Customer';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
+import * as bcrypt from 'bcryptjs';
 
 
 @Component({
@@ -21,6 +23,10 @@ export class UsersignupformComponent implements OnInit {
   password: String = "";
   confirmPassword: String = "";
   isPasswordMatched: boolean = false;
+  customer:Customer = new Customer;
+  hashedPassword:string='';
+  salt = bcrypt.genSaltSync(10);
+
 
   currentDate = new Date();
   minDateRaw = new Date().setDate(this.currentDate.getDate() - 36500);
@@ -30,31 +36,24 @@ export class UsersignupformComponent implements OnInit {
   maxDate = new Date(this.maxDateRaw).toLocaleDateString()
   formattedMaxDate = this.datePipe.transform(this.maxDate, 'yyyy-MM-dd');
 
-  signUpForm = new FormGroup({
-    firstName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-    lastName: new FormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-    gender: new FormControl(''),
-    userName: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
-    mailId: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
-    mobileNum: new FormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],),
-    dateOfBirth: new FormControl('', [Validators.required])
+  signUpForm = new UntypedFormGroup({
+    firstName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+    lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+    gender: new UntypedFormControl(''),
+    userName: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
+    mailId: new UntypedFormControl('', [Validators.required, Validators.email]),
+    password: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
+    confirmPassword: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
+    mobileNum: new UntypedFormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],),
+    dateOfBirth: new UntypedFormControl('', [Validators.required])
   },
 
   );
 
 
-  myObservable = this.userService.createCustomer(this.signUpForm.value);
-
-  myObserver = {
-    next: (data: any) => console.log(JSON.stringify(this.signUpForm.value)),
-    error: (err: string) => console.error('Observer got an error: ' + err),
-    complete: () => console.log('Observer got a complete notification'),
-  };
 
   save() {
-    this.userService.createCustomer(this.signUpForm.value).subscribe((data:any)=>{console.log(data)})
+    this.userService.createCustomer(this.customer).subscribe((data:any)=>{console.log(data)})
   }
 
   onEnterPassword(e: any) {
@@ -85,6 +84,9 @@ export class UsersignupformComponent implements OnInit {
   onSubmit() {
     this.submitted = true
     if (this.signUpForm.valid) {
+      this.customer=this.signUpForm.value;
+      this.hashedPassword= bcrypt.hashSync(this.customer.password,this.salt);
+      this.customer.password=this.hashedPassword;
       this.save();
       this.goToLoginPage();
     } else {

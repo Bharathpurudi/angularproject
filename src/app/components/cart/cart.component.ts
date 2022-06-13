@@ -1,7 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import {v4 as uuidv4} from 'uuid';
 import { Observable } from 'rxjs';
 import { cartId, removeProduct } from 'src/app/cart-state-store/cart.actions';
 import { productsCount, selectCartId, selectGroupedCartEntries, selectUpdtQtyCartEntries } from 'src/app/cart-state-store/cart.selector';
@@ -13,6 +12,7 @@ import { OrderProducts } from 'src/app/EntityModels/OrderProducts';
 import { Product } from 'src/app/EntityModels/Product';
 import { CartserviceService } from 'src/app/services_folder/cartservice.service';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
+import * as uuid from 'uuid'
 
 @Component({
   selector: 'app-cart',
@@ -27,7 +27,7 @@ export class CartComponent implements OnInit {
     })
     this.store.select(selectCustomer).subscribe({
       next:(data)=> this.custId=data[0].custId
-    })
+    }) 
     this.cartService.getcartId(this.custId).subscribe({
       next:(data)=>this.cartId=data
     })
@@ -64,7 +64,7 @@ export class CartComponent implements OnInit {
   lengthOfCartProducts:number=0;
 
   generateInvoiceNum():string{
-    let invoiceNum=uuidv4()
+    let invoiceNum=uuid.v4()
     return invoiceNum;
   }
 
@@ -79,9 +79,7 @@ export class CartComponent implements OnInit {
   getOrderProducts(){
     const orderProducts:OrderProducts[]=[];
     this.cartProducts.forEach(element => {
-      orderProducts.push(new OrderProducts(0,element.productId,0))
-
-       
+      orderProducts.push(new OrderProducts(0,element.productId,0)) 
     });
     return orderProducts;
   }
@@ -101,7 +99,6 @@ export class CartComponent implements OnInit {
       }
     })
     this.validateProducts();
-
   }
 
   validateProducts(){

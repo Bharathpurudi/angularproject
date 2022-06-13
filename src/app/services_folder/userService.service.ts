@@ -15,8 +15,8 @@ export class UserServiceService {
     return this.http.post(`${this.baseUrl}`, customer);
   }
 
-  getCustomer(name:string, pass:string):Observable<Object>{
-    return this.http.get(`${this.baseUrl}/${name}/${pass}`)
+  getCustomer(name:string):Observable<Object>{
+    return this.http.get(`${this.baseUrl}/${name}`)
   }
 
   updateCustomer(customer:Object): Observable<Object>{

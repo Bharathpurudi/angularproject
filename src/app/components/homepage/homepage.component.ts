@@ -1,6 +1,8 @@
+import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Customer } from 'src/app/EntityModels/Customer';
@@ -14,8 +16,8 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class HomepageComponent implements OnInit {
 
-  constructor(private router:Router, private productService:ProductServiceService, private storeService:StoreserviceService, private store:Store) { 
-    this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data))
+  constructor(private router:Router, private productService:ProductServiceService,private cookies:CookieService, private storeService:StoreserviceService, private store:Store) { 
+    this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data[0]))
   }
 
   ngOnInit(): void {
@@ -57,13 +59,14 @@ customer : Customer = new Customer();
 
   ]
 
-  
-
+ 
   goToProductsPage(){
     this.router.navigate(['/products']);
   }
 
   clickOnCategory(category:string){
+    const jwtToken = this.cookies.get('jwt_token')
+    const parsedJwt = JSON.parse(atob(jwtToken.split('.')[1]))
     this.storeService.setMyVariable(category);
     this.storeService.setProductsFoundVar(true);
     this.goToProductsPage();

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { createCustomer } from 'src/app/customer-state-store/customer.action';
 import { Customer } from 'src/app/EntityModels/Customer';
+import { AuthServiceService } from 'src/app/services_folder/auth-service.service';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 
 @Component({
@@ -19,7 +20,8 @@ export class LoginpageComponent implements OnInit {
 
   loginForm = NgForm
 
-  constructor(private router: Router, private userService: UserServiceService, private store:Store) { }
+  constructor(private router: Router, private userService: UserServiceService, private store:Store, private authService:AuthServiceService
+  ) { }
 
   ngOnInit(): void {
   }
@@ -49,6 +51,10 @@ export class LoginpageComponent implements OnInit {
    validateLogin() {
     if (this.customer.userName === this.state.userName && this.customer.password === this.state.password) {
       this.customerStateSet();
+      const requestBody={userName:this.state.userName,password:this.state.password}
+      this.authService.generateToken(requestBody).subscribe((data)=>{
+        const parsedData = JSON.parse(data);
+      })
       this.gotoHome()
       this.state.errorMsg = ""
     } else {

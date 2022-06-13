@@ -2,13 +2,13 @@
     <header></header>
     <div class="cart-container">
         <div class="cart-products">
-            <ul *ngFor="let product of cartProducts">
+            <ul *ngFor="let product of cartProducts;let i=index">
                 <li class="cart-product">
                     <img src={{product.imageUrl}} class="cart-product-image" alt={{product.productId}}/>
                     <p class="cart-product-name">{{product.productName}}</p>
                     <div>
                         <label for="product-quantity" class="product-quantity">Qty</label>
-                        <input type="number" class="quantity" id="product-quantity" value="1" min="1" max="10" (change)="updateTheProductsQuantity(product.productId,$event)">
+                        <input type="number" class="quantity" id="product-quantity" value= {{orderProductsList[i].quantity}} min="1" max="10" (change)="updateTheProductsQuantity(product.productId,$event)">
                     </div>
                     <button class="remove-button" (click)="onRemoveProduct(product.productId)">Remove</button>
                 </li>

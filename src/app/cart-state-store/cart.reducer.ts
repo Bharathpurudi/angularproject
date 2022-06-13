@@ -1,9 +1,12 @@
 import { state } from "@angular/animations";
 import { ActionReducer, createReducer,INIT,on, UPDATE } from "@ngrx/store";
+import { OrderProducts } from "../EntityModels/OrderProducts";
 import { Product } from "../EntityModels/Product";
-import { addProduct,removeProduct,clearCart, cartId} from "./cart.actions";
+import { addProduct,removeProduct,clearCart, cartId, addUpdatedQunatityProduct} from "./cart.actions";
 
 export const initialCartProducts:Product[]=[];
+
+export const initialUpdtProdQty:OrderProducts[]=[];
 
 export const initialCartId:Number=0;
 
@@ -36,10 +39,16 @@ export const cartIdReducer=createReducer(
     num=number;
     return num;
   })
+)
 
+export const updateProdQtyReducer=createReducer(
+  initialUpdtProdQty,
+  on(addUpdatedQunatityProduct,(entries,orderProduct)=>{
+    const addedUpdtProdQty:OrderProducts[]=JSON.parse(JSON.stringify(entries))
+    addedUpdtProdQty.push(orderProduct)
+    return addedUpdtProdQty;
+})
 
-
-  
 )
 
 

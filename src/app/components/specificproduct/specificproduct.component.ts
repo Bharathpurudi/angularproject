@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { addProduct } from 'src/app/cart-state-store/cart.actions';
+import { addProduct, addUpdatedQunatityProduct } from 'src/app/cart-state-store/cart.actions';
 import { productsCount, selectGroupedCartEntries } from 'src/app/cart-state-store/cart.selector';
+import { OrderProducts } from 'src/app/EntityModels/OrderProducts';
 import { Product } from 'src/app/EntityModels/Product';
 import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
 
@@ -15,6 +16,7 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class SpecificproductComponent implements OnInit {
 
+  orderProduct!: OrderProducts;
   product :Product = new Product();
   validatingProduct:Product=new Product();
   productExpireDate:Date;
@@ -25,6 +27,7 @@ export class SpecificproductComponent implements OnInit {
 
   constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe, private router:Router) {
     this.getTheProduct();
+    this.orderProduct=new OrderProducts(0,this.product.productId,0)
     this.productExpireDate=this.getProductExpireDate()
     this.referenceDate=this.getRefDate();
     this.currentDate=new Date();
@@ -61,6 +64,7 @@ export class SpecificproductComponent implements OnInit {
     this.productAdded=true;
     this.storeService.setCartProducts(this.product)
     this.store.dispatch(addProduct(this.product))
+    this.store.dispatch(addUpdatedQunatityProduct(this.orderProduct))
     this.store.select(selectGroupedCartEntries).subscribe((data:any)=>(console.log(data)))
     }
   }

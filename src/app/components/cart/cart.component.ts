@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import {v4 as uuidv4} from 'uuid';
 import { Observable } from 'rxjs';
 import { cartId, removeProduct } from 'src/app/cart-state-store/cart.actions';
-import { productsCount, selectCartId, selectGroupedCartEntries } from 'src/app/cart-state-store/cart.selector';
+import { productsCount, selectCartId, selectGroupedCartEntries, selectUpdtQtyCartEntries } from 'src/app/cart-state-store/cart.selector';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Cart } from 'src/app/EntityModels/Cart';
 import { Customer } from 'src/app/EntityModels/Customer';
@@ -34,12 +35,15 @@ export class CartComponent implements OnInit {
       next:(data:any)=>this.lengthOfCartProducts=data
     })
 
+    this.store.select(selectUpdtQtyCartEntries).subscribe({
+      next:(data:any)=>console.log(data)
+    })
+
     this.orderDate= this.getTodayDate()
     this.orderAmount=this.getOrderAmount()
     this.checkoutAmount=this.orderAmount-this.orderDiscount
     this.orderProductsList=this.getOrderProducts();
-    console.log(this.orderProductsList)
-    this.invoiceNum=this.invoiceNum+1
+    this.invoiceNum=this.generateInvoiceNum()
     this.validateProducts()
     
    }
@@ -52,12 +56,17 @@ export class CartComponent implements OnInit {
   cartId:number=0;
   orderProductsList:OrderProducts[]=[];
   checkoutAmount:number= 0;
-  invoiceNum:number= 1010;
+  invoiceNum:string="";
   orderAmount:number= 0;
   orderDate:string|null="";
   orderDiscount:number= 50;
   isCartHavingItems:boolean=true;
   lengthOfCartProducts:number=0;
+
+  generateInvoiceNum():string{
+    let invoiceNum=uuidv4()
+    return invoiceNum;
+  }
 
   getOrderAmount(){
     let amount=0;
@@ -71,6 +80,8 @@ export class CartComponent implements OnInit {
     const orderProducts:OrderProducts[]=[];
     this.cartProducts.forEach(element => {
       orderProducts.push(new OrderProducts(0,element.productId,0))
+
+       
     });
     return orderProducts;
   }
@@ -128,7 +139,7 @@ export class CartComponent implements OnInit {
   }
 
   checkOut(){
-    this.reduceQuantity();
+    //this.reduceQuantity();
     const checkOutOrder:OrderEntity[]=[];
     checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList))
     const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)

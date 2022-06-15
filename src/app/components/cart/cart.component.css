@@ -1,5 +1,5 @@
 .cart-bg-container{
-    background-color: #1c1a1a;
+    background-color: #000000;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -19,6 +19,7 @@
     background-color: #2c364c;
     border-radius: 10px;
     margin-right: 10px;
+    padding-top: 5px;
 }
 .cart-product{
     display: flex;
@@ -27,17 +28,30 @@
     margin-top: 5px;
     height: 100px;
     justify-content: space-around;
-    background-color: #bba7a7;
+    background-color: #919191;
     border-radius: 15px;
+}
+.cart-div{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 120px;
+    height: 100px;
 }
 .cart-product-image{
     height: 75px;
     width: 75px;
     margin-left: 10px;
     border-radius: 15px;
+    align-self: flex-start;
 }
-.product-name{
-    color: #ffffff;
+.cart-product-name{
+    font-family: sans-serif;
+  font-size: 16px;
+  color: #fffcfc;
+  font-weight: 600;
+  padding-top: 16px;
 }
 .product-quantity{
     font-family: sans-serif;
@@ -48,7 +62,7 @@
     padding-right: 10px;
 }
 .quantity{
-    width: 80px;
+    width: 60px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #ffffff;
@@ -66,9 +80,10 @@
     height: 50vh;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     background-color: #2c364c;
     border-radius: 15px;
+    padding-top: 20px;
 }
 .remove-button{
     outline: none;
@@ -82,5 +97,70 @@
     border-style: none;
     border-radius: 10px;
     margin-right: 50px;
+    padding: 5px;
+}
+.checkout-deatails-con{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 35vw;
+    height: 30px;
+    margin-bottom: 5px;
+}
+.empty-cart{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:30vw;
+    height: 200px;
+}
+.checkout-price-heading{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 18px;
+  color: #fffcfc;
+  font-weight: 500;
+  text-align: center;
+  margin-left: 10px;
+}
+.checkout-price-details{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  color: #fffcfc;
+  font-weight: 500;
+}
+.checkout-price-details1{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  color: #fffcfc;
+  font-weight: 500;
+  margin-right: 35px;
+}
+hr{
+width: 90%;
+margin-left: auto;
+margin-right: auto;
+height: 2px;
+background-color:white;
+color:white;
+border: 0 none;
+border-radius: 1px;
+}
+.checkout-button{
+    outline: none;
+    cursor: pointer;
+    background-color: #4f46e5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    color: #fffcfc;
+    font-weight: 500;
+    border-style: none;
+    border-radius: 10px;
+    margin-bottom: 10px;
     padding: 5px;
 }

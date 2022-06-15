@@ -1,5 +1,5 @@
 .products-bg-container{
-    background-color: #1c1a1a;
+    background-color: #000000;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -59,3 +59,15 @@
     font-size: 600;
     color: #ffffff;
   }
+  .empty-cart{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width:50vw;
+    height: 500px;
+}
+.not-found-img{
+  height: 300px;
+  width: 300px;
+}

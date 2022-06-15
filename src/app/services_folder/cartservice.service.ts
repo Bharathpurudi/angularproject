@@ -19,4 +19,9 @@ export class CartserviceService {
     return this.http.get(`${this.baseUrl}/getcartid/${custId}`)
   }
 
+  getCartOfCustomer(cartId:number):Observable<Object>{
+    return this.http.get(`${this.baseUrl}/getcart/${cartId}`)
+  }
+
+
 }

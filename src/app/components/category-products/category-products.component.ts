@@ -15,44 +15,63 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class CategoryProductsComponent implements OnInit {
 
-  constructor(private router:Router,private cookies:CookieService,private store:Store, private productService:ProductServiceService,private storeService:StoreserviceService) { 
+  constructor(private router:Router, private cookies:CookieService,private store:Store, private productService:ProductServiceService,private storeService:StoreserviceService) { 
     this.category=storeService.getMyVariable();
     this.productsFound=storeService.getProductsFoundVar();
     this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data[0]))
+    this.renderProducts(this.category)
   }
 
-  currentProduct :Product= new Product();
-  tempProdList:Product[]=[];
+  
 
   ngOnInit(): void {
-    this.renderProducts(this.category)
-    this.productsFound=this.storeService.getProductsFoundVar();
+    
   }
-
+  currentProduct :Product= new Product();
+  tempProdList:Product[]=[];
   category:string='';
   productsList:any[]|any;
   productsFound:boolean=false;
   customer:Customer=new Customer;
+  isNoProducts:boolean=true;
+  productsListLength:number=0;
 
   renderProducts(category:string){
     if(this.productsFound===true){
-      this.productService.getProducts(category).subscribe((data:any)=>{this.productsList=data})
+      this.productService.getProducts(category).subscribe({
+        next:(data:any)=>{this.productsList=data,
+          this.storeService.setProductsFoundVar(false),
+          this.productsListLength=this.productsList.length,
+          this.validateProductsList()
+        }
+      })
     }else{
-      this.productsList=this.storeService.getProductsList();
+      let tempProductsList:Product[]=[]
+      this.productService.getAllProducts().subscribe({
+        next:(data:any)=> {tempProductsList=data,
+          this.productsList=tempProductsList.filter(e=>e.productName.toLocaleLowerCase().includes(category)),
+          this.storeService.setProductsFoundVar(true),
+          this.productsListLength=this.productsList.length,
+          this.validateProductsList()
+          }
+      })
+      
+      
     }
     
+  }
+
+  validateProductsList(){
+    if(this.productsListLength===0){
+      this.isNoProducts=false;
+    }
   }
 
   specificProduct(productName:string){
     this.tempProdList=this.productsList.filter((product: { productName: string; })=>product.productName===productName)
     this.currentProduct=this.tempProdList[0];
     this.storeService.setProduct(this.currentProduct);
-    const jwtToken = this.cookies.get('jwt_token')
-    const parsedJwt = JSON.parse(atob(jwtToken.split('.')[1]))
-    if(parsedJwt.userName===this.customer.userName){
-      this.router.navigate(['/specificproduct'])
-    }
-    
+    this.router.navigate(['/specificproduct'])
   }
 
 }

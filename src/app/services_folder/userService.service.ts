@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 export class UserServiceService {
 
   private baseUrl = 'http://localhost:8081/smmp/api/customer';
+
   constructor(private http: HttpClient) { }
 
   createCustomer(customer: Object): Observable<Object> {
@@ -22,6 +23,5 @@ export class UserServiceService {
   updateCustomer(customer:Object): Observable<Object>{
     return this.http.post(`${this.baseUrl}/updatecustomer`,customer);
   }
-
 
 }

@@ -24,13 +24,15 @@ export class SpecificproductComponent implements OnInit {
   currentDate:Date;
   productAdded:boolean=false;
   productExpired:boolean=false;
+  outOfStock:boolean=true;
 
   constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe, private router:Router) {
     this.getTheProduct();
-    this.orderProduct=new OrderProducts(0,this.product.productId,0)
+    this.orderProduct=new OrderProducts(0,this.product.productId,1)
     this.productExpireDate=this.getProductExpireDate()
     this.referenceDate=this.getRefDate();
     this.currentDate=new Date();
+    this.productOutOfStock();
   }
 
   getProductExpireDate(){
@@ -46,6 +48,12 @@ export class SpecificproductComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTheProduct()
+  }
+
+  productOutOfStock(){
+    if(this.product.stockQuantity<=0){
+      this.outOfStock=false;
+    }
   }
 
   getTheProduct(){

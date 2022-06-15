@@ -21,6 +21,7 @@
             <div class="add-cart-container">
                 <button class="add-cart-button" [hidden]="productAdded" (click)="addToCart()">Add to Cart</button>
                 <button class="add-cart-button" [hidden]="!productAdded" (click)="goToCart()">Go to Cart</button>
+                <button class="add-cart-button" [hidden]="outOfStock">Out Of Stock</button>
             </div>
         </div>
         <div class="product-image-title-container">

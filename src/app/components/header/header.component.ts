@@ -39,6 +39,9 @@ export class HeaderComponent implements OnInit {
   goToCart(){
     this.router.navigate(['/cart']);
   }
+  goToUserProfile(){
+    this.router.navigate(['/user-profile']);
+  }
 
   productsPage(){
     this.router.navigate(['/products']);
@@ -54,8 +57,8 @@ export class HeaderComponent implements OnInit {
       this.storeService.setMyVariable(this.searchedInput);
       this.productsPage()
     }else{
+      this.storeService.setMyVariable(this.searchedInput);
       this.storeService.setProductsFoundVar(false)
-      this.productsService.getProductsLike(this.searchedInput).subscribe((data:any)=>{this.storeService.setProductsList(data)})
       this.productsPage()
     }
     

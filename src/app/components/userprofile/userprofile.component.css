@@ -1,0 +1,144 @@
+.up-bg-container{
+    background-color: #000000;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+.user-profile-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100vw;
+    margin-top: 10px;
+}
+.user-profile-list{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 39vw;
+    margin-right: 10px;
+    border-radius: 10px;
+}
+.user-profile-personal-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 60vw;
+    border-radius: 10px;
+}
+.pro-pic-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 30vw;
+    background-color: rgb(94, 107, 117);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    height: 100px;
+}
+.pro-pic{
+    height: 75px;
+    width: 75px;
+    border-radius: 37.5px;
+}
+.welcome-msg-container{
+    width:100px;
+    height: 50px;
+}
+.welcome-msg{
+    font-family: sans-serif;
+    font-size: 15px;
+    color: #fffcfc;
+    font-weight: 500;
+    margin-right: 2px;
+}
+.user-name{
+    font-family: sans-serif;
+    font-size: 17px;
+    color: #fffcfc;
+    font-weight: 500;
+    margin-right: 2px;
+}
+.personal-details-edit{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 30vw;
+    height: 30px;
+}
+.checkbox-show {
+    height: 13px;
+    width: 13px;
+    margin-left: 10px;
+  }
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 35vw;
+    padding-left: 25px;
+}
+.label {
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: #ffffff;
+font-weight: 500;
+font-size: 15px;
+margin-bottom: 5px;
+text-decoration: none;
+}
+.login-input-element {
+width: 30vw;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: #ffffff;
+font-weight: 500;
+font-size: 15px;
+margin-bottom: 10px;
+outline: none;
+border-radius: 5px;
+border: 0.5px solid #f8fafc;
+padding: 5px;
+background-color: transparent;
+}
+.is-invalid{
+width: 30vw;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: #ffffff;
+font-weight: 500;
+font-size: 15px;
+margin-bottom: 10px;
+outline: none;
+border-radius: 5px;
+border: 0.5px solid #f52525;
+padding: 5px;
+background-color: transparent;
+}
+.button-container{
+width: 30vw;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+
+}
+.login-button {
+width: 130px;
+text-align: center;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: #ffffff;
+font-weight: 500;
+font-size: 15px;
+margin-bottom: 5px;
+border-style: none;
+border-radius: 5px;
+background-color: #4f46e5;
+height: 40px;
+}

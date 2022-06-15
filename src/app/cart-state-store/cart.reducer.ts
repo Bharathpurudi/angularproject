@@ -2,7 +2,7 @@ import { state } from "@angular/animations";
 import { ActionReducer, createReducer,INIT,on, UPDATE } from "@ngrx/store";
 import { OrderProducts } from "../EntityModels/OrderProducts";
 import { Product } from "../EntityModels/Product";
-import { addProduct,removeProduct,clearCart, cartId, addUpdatedQunatityProduct} from "./cart.actions";
+import { addProduct,removeProduct,clearCart, cartId, addUpdatedQunatityProduct, removeUpdatedQtyProd} from "./cart.actions";
 
 export const initialCartProducts:Product[]=[];
 
@@ -47,6 +47,15 @@ export const updateProdQtyReducer=createReducer(
     const addedUpdtProdQty:OrderProducts[]=JSON.parse(JSON.stringify(entries))
     addedUpdtProdQty.push(orderProduct)
     return addedUpdtProdQty;
+}),
+
+on(removeUpdatedQtyProd,(entries,product)=>{
+  const addedProducts:OrderProducts[]=JSON.parse(JSON.stringify(entries))
+  const found=addedProducts.find(e=>e.productId===product.productId)
+  if(found){
+    addedProducts.splice(addedProducts.indexOf(found),1)
+  }
+  return addedProducts;
 })
 
 )

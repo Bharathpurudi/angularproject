@@ -20,6 +20,10 @@ export class ProductServiceService {
     return this.http.get(`${this.baseUrl}/getAllProductsLike/${category}`)
   }
 
+  getAllProducts():Observable<any>{
+    return this.http.get(`${this.baseUrl}/getAllProducts`)
+  }
+
   createProduct(product:Product):Observable<any>{
     return this.http.post(`${this.baseUrl}/createProduct`,product)
   }

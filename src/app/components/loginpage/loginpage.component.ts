@@ -52,14 +52,18 @@ export class LoginpageComponent implements OnInit {
 
    validateLogin(data:any) {
     if ((data.userName === this.state.userName) && (bcrypt.compareSync(this.state.password,data.password))) {
+      this.state.errorMsg = ""
       this.customerStateSet();
       const requestBody={userName:this.state.userName,userId:data.userId,email:data.email}
-      this.authService.generateToken(requestBody).subscribe((data)=>{
-        const parsedData = JSON.parse(data);
-        this.cookies.set('jwt_token', parsedData.JWT,{expires:30})
+      this.authService.generateToken(requestBody).subscribe({
+        next: (data)=>{
+        const parsedData = JSON.parse(data)
+        this.cookies.set('jwt_token', parsedData.JWT,{expires:3})
+        this.gotoHome()
+        }
+        
       })
-      this.gotoHome()
-      this.state.errorMsg = ""
+     
     } else {
       this.state.errorMsg = "Wrong Login Credentials"
       console.log(data.password)

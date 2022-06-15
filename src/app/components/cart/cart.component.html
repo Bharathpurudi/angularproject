@@ -2,21 +2,53 @@
     <header></header>
     <div class="cart-container">
         <div class="cart-products">
-            <ul *ngFor="let product of cartProducts;let i=index">
+            <ul *ngFor="let product of orderProductsList;let i=index">
                 <li class="cart-product">
-                    <img src={{product.imageUrl}} class="cart-product-image" alt={{product.productId}}/>
-                    <p class="cart-product-name">{{product.productName}}</p>
-                    <div>
-                        <label for="product-quantity" class="product-quantity">Qty</label>
-                        <input type="number" class="quantity" id="product-quantity" value= {{orderProductsList[i].quantity}} min="1" max="10" (change)="updateTheProductsQuantity(product.productId,$event)">
+                    <div class="cart-div">
+                        <img src={{cartProducts[i].imageUrl}} class="cart-product-image" alt={{product.productId}}/>
                     </div>
-                    <button class="remove-button" (click)="onRemoveProduct(product.productId)">Remove</button>
+                    <div class="cart-div">
+                        <p class="cart-product-name">{{cartProducts[i].productName}}</p>
+                    </div>
+                    <div class="cart-div">
+                        <div>
+                            <label for="product-quantity" class="product-quantity">Qty</label>
+                            <input type="number" class="quantity" id="product-quantity" value= {{product.quantity}} min="1" max="10" (change)="updateTheProductsQuantity(product.productId,$event)">
+                        </div>
+                    </div>
+                    <div class="cart-div">
+                        <button class="remove-button" (click)="onRemoveProduct(product.productId)">Remove</button>
+                    </div>
+                    
                 </li>
             </ul>
+            <div class="empty-cart" [hidden]="isCartHavingItems">
+                <p class="cart-product-name">Uh.. Uhooo..Your Cart is Empty</p>
+                <p class="product-quantity">Add items to cart</p>
+                <button class="remove-button" (click)="goToHome()">Shop now</button>
+            </div>
         </div>
         <div class="cart-checkout-container">
-            <p>bharath</p>
-            <button class="btn btn-primary" (click)="checkOut()" [hidden]="isCartHavingItems" >Checkout</button>
+            <h1 class="checkout-price-heading">Price Details</h1>
+            <hr>
+            <div class="checkout-deatails-con">
+                <p class="checkout-price-details">Order Amount</p>
+                <p class="checkout-price-details1">{{orderAmount}}</p>
+            </div>
+            <div class="checkout-deatails-con">
+                <p class="checkout-price-details">Discount Amount (5%)</p>
+                <p class="checkout-price-details1">{{orderDiscount}}</p>
+            </div>
+            <div class="checkout-deatails-con">
+                <p class="checkout-price-details">Delivery Charges</p>
+                <p class="checkout-price-details1">{{deliveryCharges}}</p>
+            </div>
+            <hr>
+            <div class="checkout-deatails-con">
+                <p class="checkout-price-details">Payable Amount</p>
+                <p class="checkout-price-details1">{{checkoutAmount}}</p>
+            </div>
+            <button class="checkout-button" (click)="checkOut()" [hidden]="!isCartHavingItems" >Checkout</button>
         </div>
     </div>
 </div>

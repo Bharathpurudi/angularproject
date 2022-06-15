@@ -1,0 +1,19 @@
+<div class="products-bg-container">
+    <header></header>
+    <div class="products-container">
+        <ul  *ngFor="let category of productsList" >
+            <li class="product-display" (click)="specificProduct(category.productName)" >
+                <img class="product-image" src={{category.imageUrl}} alt={{category.productName}} />
+                <p class="product-name">{{category.productName}}</p>
+                <div class="price-rating-container">
+                    <p class="product-price">₹ :<span class="rating-no">{{category.productPrice}}</span></p>
+                    <p class="product-price">Rating: <span class="rating-no">4.5</span></p>
+                </div>
+            </li>
+        </ul>
+        <div class="empty-cart" [hidden]="isNoProducts">
+            <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1655275475/no-product-found_tsrdlo.png" class="not-found-img"/>
+        </div>
+    </div>
+    
+</div>

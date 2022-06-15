@@ -1,0 +1,35 @@
+<div class="home-page-bg-container">
+    <header></header>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1653548015/carousel4_yokhqq.png" class="corousel-image" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1653299658/carousel1_q3fviq.png" class="corousel-image" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1653299676/carousel3_lvokv7.png" class="corousel-image" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <div class="categories-container">
+        <ul class="categories-list" *ngFor="let category of catogoriesList">
+          <li class="category-list-element" (click)="clickOnCategory(category.catName)">
+            <img src={{category.catUrl}} class="cat-image" />
+           <p class="cat-item-name ">{{category.catName}}</p>
+          </li>
+        </ul>
+      </div>     
+</div> 
+
+
+

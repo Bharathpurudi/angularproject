@@ -15,8 +15,7 @@
         class="login-input-element"
         name="username-input"
         placeholder="Username"
-        required ngModel
-        (change)="onEnterUserName($event)"
+        required [(ngModel)] = "state.userName"
         
       />
       <label class="label" for="password-input">
@@ -26,8 +25,7 @@
         type={{state.passwordType}}
         class="login-input-element"
         name="password-input"
-        placeholder="Password" required ngModel
-        (change)="onEnterPassword($event)"
+        placeholder="Password" required [(ngModel)] = "state.password"
       />
       <div class="show-password-container">
         <input
@@ -50,7 +48,7 @@
       <p class="error-msg">{{state.errorMsg}}</p>
       <div class="signup-container">
         <p class="label">Forgot Password</p>
-        <a class="label" routerLink="signup">Not a member yet.... SignUp! </a>
+        <a class="label-anchor " (click)="goToSignUp()">Not a member yet? SignUp! </a>
       </div>
     </form>
   </div>

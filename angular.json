@@ -28,7 +28,9 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css"
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/font-awesome/css/font-awesome.min.css"
             ],
             "scripts": ["node_modules/bootstrap/dist/js/bootstrap.js"]
           },
@@ -108,5 +110,7 @@
       "skipTests": true
     }
   },
-  "defaultProject": "souramandala"
+  "cli": {
+    "analytics": "3cd4f912-84a2-4031-aba6-e89f55db718e"
+  }
 }

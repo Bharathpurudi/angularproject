@@ -1,5 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { JsonWebTokenError } from 'jsonwebtoken';
+import { CookieService } from 'ngx-cookie-service';
+import { createCustomer } from 'src/app/customer-state-store/customer.action';
+import { Customer } from 'src/app/EntityModels/Customer';
+import { AuthServiceService } from 'src/app/services_folder/auth-service.service';
+import { UserServiceService } from 'src/app/services_folder/userService.service';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'loginpage',
@@ -8,40 +17,74 @@ import { NgForm } from '@angular/forms';
 })
 export class LoginpageComponent implements OnInit {
 
-  state = { userName: "", password: "", passwordType: "password", errorMsg:"" }
+  state = { userName: "", password: "", passwordType: "password", errorMsg: "", isLogin:false}
 
-  userCredentials={}
+  customer: Customer = new Customer;
 
   loginForm = NgForm
 
-  constructor() { }
+  constructor(private router: Router, private userService: UserServiceService, private store:Store, private authService:AuthServiceService,
+  private cookies:CookieService) { }
 
   ngOnInit(): void {
   }
 
-  onEnterUserName(e:any){
-    this.state.userName=e.target.value
+  onChange(e: any) {
+    if (e.target.checked == true) {
+      this.state.passwordType = "text"
+    } else {
+      this.state.passwordType = "password"
+    }
   }
 
-  onEnterPassword(e:any){
-    this.state.password=e.target.value
+
+  customerStateSet(){
+    this.store.dispatch(createCustomer(this.customer))
+  };
+
+  getCustomerDetails() {
+    this.userService.getCustomer(this.state.userName).subscribe(
+     {
+       next:(data:any)=>{this.customer=data,this.validateLogin(data),console.log(data)}
+     }
+    )
   }
 
-  onChange(e:any){
-    if(e.target.checked==true){
-      this.state.passwordType="text"
-    }else{
-      this.state.passwordType="password"
+   validateLogin(data:any) {
+    if ((data.userName === this.state.userName) && (bcrypt.compareSync(this.state.password,data.password))) {
+      this.state.errorMsg = ""
+      this.customerStateSet();
+      const requestBody={userName:this.state.userName,userId:data.userId,email:data.email}
+      this.authService.generateToken(requestBody).subscribe({
+        next: (data)=>{
+        const parsedData = JSON.parse(data)
+        this.cookies.set('jwt_token', parsedData.JWT,{expires:3})
+        this.gotoHome()
+        }
+        
+      })
+     
+    } else {
+      this.state.errorMsg = "Wrong Login Credentials"
+      console.log(data.password)
+      console.log(bcrypt.compareSync(data.password,this.state.password))
     }
   }
 
   onSubmit(loginForm: NgForm) {
-    if(this.state.userName==""&&this.state.password==""){
-      this.state.errorMsg="Enter The correct User Credentials"
-    }else{
-      this.state.errorMsg=""
+    if (this.state.userName == "" && this.state.password == "") {
+      this.state.errorMsg = "Enter The User Credentials"
+    } else {
+      this.getCustomerDetails();
     }
-    console.log(loginForm.value)
+  }
+
+  gotoHome() {
+    this.router.navigate(['/home']);
+  }
+
+  goToSignUp(){
+    this.router.navigate(['/signup']);
   }
 
 

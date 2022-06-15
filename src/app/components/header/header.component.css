@@ -1,0 +1,101 @@
+.header-container {
+    background-color: #141313;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100vw;
+    justify-content: space-between;
+    height: 80px;
+  }
+  .logo {
+    height: 40px;
+    width: 40px;
+    border: 20px;
+    margin-left: 50px;
+    margin-right: auto;
+    cursor: pointer;
+  }
+  .tabs-container {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    align-items: center;
+    width: 90vw;
+    margin-right: 15px;
+  }
+  .home-cart-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 35px;
+
+  }
+  .link-item {
+    text-decoration: none;
+  }
+  .tab-item {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    color: #fffcfc;
+    font-weight: 500;
+    margin-right: 20px;
+    cursor: pointer;
+  }
+  .tab-item-1 {
+    font-family: sans-serif;
+    font-size: 15px;
+    color: #fffcfc;
+    font-weight: 500;
+    margin-right: 2px;
+    cursor: pointer;
+  }
+  .tab-item-2 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 10px;
+    color: #fffcfc;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: #4f46e5;
+    padding: 3px;
+    border-radius: 10px;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    align-self: flex-start;
+  }
+  .search-input-element {
+    width: 30vw;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 15px;
+    outline: none;
+    border-radius: 5px;
+    border: 0.5px solid #f8fafc;
+    padding: 5px;
+    background-color: transparent;
+  }
+  .pro-icon-class {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    margin-left: auto;
+  }
+  .logout-button {
+    outline: none;
+    cursor: pointer;
+    background-color: #4f46e5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 15px;
+    color: #fffcfc;
+    font-weight: 500;
+    border-style: none;
+    border-radius: 10px;
+    margin-right: 50px;
+    padding: 5px;
+  }
+  

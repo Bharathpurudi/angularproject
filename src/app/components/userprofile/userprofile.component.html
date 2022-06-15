@@ -1,0 +1,111 @@
+<div class="up-bg-container">
+    <header></header>
+    <div class="user-profile-container">
+        <div class="user-profile-list">
+            <div class="pro-pic-container">
+                <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1637651836/BharathPurudiPP_vckyod.jpg" class="pro-pic"/>
+                <div class="welcome-msg-container">
+                    <p class="welcome-msg">Hello...</p>
+                    <p class="user-name">{{customer.firstName}}</p>
+                </div>
+            </div>
+            <div class="account-settings">
+                <ul>
+                    <li>Personal Details</li>
+                    <li>Orders</li>
+                </ul>
+            </div>
+        </div>
+        <div class="user-profile-personal-details">
+            <div class="personal-details-edit">
+                <p class="label">User Personal Details</p>
+            <div>
+                <label class="label">
+                    Edit
+                </label>
+                <input class="checkbox-show" type="checkbox" (change)="onCheckOfEdit($event)" >
+            </div>
+            </div>
+            <div>
+                <form class="signup-form" [formGroup]="editForm" (ngSubmit)="onSubmit()" >
+                    <div class="form-group">
+                        <label class="label">
+                            First name
+                        </label>
+                        <input type="text" formControlName="firstName" class="login-input-element" placeholder="Ex: Bharath"
+                            [ngClass]="{ 'is-invalid': submitted && form['firstName'].errors }" [readonly]="isEditChecked"/>
+                        <div *ngIf="submitted && form['firstName'].errors" class="invalid-feedback">
+                            <div *ngIf="form['firstName'].errors['required']">First Name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">
+                            Last name
+                        </label>
+                        <input type="text" formControlName="lastName" class="login-input-element" placeholder="Ex: Purudi"
+                            [ngClass]="{'is-invalid': submitted && form['lastName'].errors }" [readonly]="isEditChecked"  />
+                        <div *ngIf="submitted && form['lastName'].errors" class="invalid-feedback">
+                            <div *ngIf="form['lastName'].errors['required']">Last Name is required</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="label">
+                           Old Password
+                        </label>
+                        <input type="password" formControlName="oldPassword" class="login-input-element"
+                            placeholder="Use AlphaNum combo" (change)="onEnterPassword($event)" 
+                            [ngClass]="{'is-invalid': submitted && form['oldPassword'].errors }" [readonly]="isEditChecked" />
+                        <div *ngIf="submitted && form['oldPassword'].errors" class="invalid-feedback">
+                            <div *ngIf="form['oldPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmpassword-input" class="label">
+                            New Password
+                        </label>
+                        <input type="password" formControlName="newPassword" class="login-input-element"
+                            name="confirmpassword-input" placeholder="Enter same as above"
+                            (change)="onEnterConfirmPassword($event)" (change)="paswordMatch($event)"
+                            [ngClass]="{'is-invalid':  submitted && form['newPassword'].errors }" [readonly]="isEditChecked"  />
+                        <div *ngIf="submitted && form['newPassword'].errors" class="invalid-feedback">
+                            <div *ngIf="form['newPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&
+                            </div>
+                            <div *ngIf="submitted || isPasswordMatched">Both the passwords should match</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobilenum-input" class="label">
+                            Mobile Number
+                        </label>
+                        <input type="text" class="login-input-element" formControlName="mobileNum"
+                            placeholder="Ex: +91-1234567890"
+                            [ngClass]="{'is-invalid': submitted && form['mobileNum'].errors }" [readonly]="isEditChecked" />
+                        <div *ngIf="submitted&& form['mobileNum'].errors" class="invalid-feedback">
+                            <div *ngIf="form['mobileNum'].errors['required']">Mobile Number is required.</div>
+                            <div *ngIf="form['mobileNum'].errors['pattern']">Please, Enter 10 digit Mobile Number.</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">
+                            Email Id
+                        </label>
+                        <input type="email" formControlName="mailId" class="login-input-element" placeholder="Ex: abc@gmail.com"
+                            required [ngClass]="{'is-invalid': submitted && form['mailId'].errors }" [readonly]="isEditChecked" />
+                        <div *ngIf="submitted && form['mailId'].errors" class="invalid-feedback">
+                            <div *ngIf="form['mailId'].errors['required']">Email is required</div>
+                            <div *ngIf="form['mailId'].errors['email']">Email must be a valid email address</div>
+                        </div>
+                    </div>
+                    <div class="button-container">
+                        <button class="login-button" [disabled]="isEditChecked">
+                            Update Details
+                        </button>
+                    </div>
+        
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

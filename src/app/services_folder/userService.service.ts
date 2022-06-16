@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { last, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -22,6 +22,10 @@ export class UserServiceService {
 
   updateCustomer(customer:Object): Observable<Object>{
     return this.http.post(`${this.baseUrl}/updatecustomer`,customer);
+  }
+
+  updateCustomerFeilds(firstName:string,lastName:string,password:string,mobileNum:string,mailId:string,custId:number,value:any):Observable<Object>{
+    return this.http.put(`${this.baseUrl}/updateFeilds/${firstName}/${lastName}/${password}/${mobileNum}/${mailId}/${custId}`,value);
   }
 
 }

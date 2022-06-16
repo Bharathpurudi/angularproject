@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { cartId, removeProduct, removeUpdatedQtyProd } from 'src/app/cart-state-store/cart.actions';
+import { cartId, clearCart, removeProduct, removeUpdatedQtyProd } from 'src/app/cart-state-store/cart.actions';
 import { updateProdQtyReducer } from 'src/app/cart-state-store/cart.reducer';
 import { productsCount, selectCartId, selectGroupedCartEntries, selectUpdtQtyCartEntries } from 'src/app/cart-state-store/cart.selector';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
@@ -48,7 +48,6 @@ export class CartComponent implements OnInit {
     this.orderProductsList=this.getOrderProducts();
     this.invoiceNum=this.generateInvoiceNum()
     this.validateProducts()
-    console.log(this.isCartHavingItems)
     
    }
 
@@ -67,6 +66,7 @@ export class CartComponent implements OnInit {
   isCartHavingItems:boolean=true;
   lengthOfCartProducts:number=0;
   deliveryCharges:number=0;
+  isCartCheckOut:boolean=true;
 
   generateInvoiceNum():string{
     let invoiceNum=uuid.v4()
@@ -148,6 +148,10 @@ export class CartComponent implements OnInit {
     }
   }
 
+  clearCart(){
+    this.store.dispatch(clearCart())
+  }
+
   updateTheProductsQuantity(productId:number, e:any){
     this.orderProductsList.forEach(element => {
       if(element.productId===productId){
@@ -194,14 +198,14 @@ export class CartComponent implements OnInit {
 
   checkOut(){
     this.reduceQuantity();
+    this.isCartCheckOut=false
     const checkOutOrder:OrderEntity[]=[];
     checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList))
     const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)
-    this.cartService.createCart(checkoutCart).subscribe(
-      {
-        next:(data:any)=>console.log(data)
-      }
-    )
+    this.cartService.createCart(checkoutCart).subscribe({
+      next:(data:any) => {console.log(data),this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
+        this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
+    })
   }
 
 

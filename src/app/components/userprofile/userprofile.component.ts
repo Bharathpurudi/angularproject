@@ -6,6 +6,9 @@ import { Customer } from 'src/app/EntityModels/Customer';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 import * as bcrypt from 'bcryptjs';
 import { CartserviceService } from 'src/app/services_folder/cartservice.service';
+import { Observable } from 'rxjs';
+import { Product } from 'src/app/EntityModels/Product';
+import { ProductServiceService } from 'src/app/services_folder/product-service.service';
 
 @Component({
   selector: 'app-userprofile',
@@ -32,6 +35,8 @@ export class UserprofileComponent implements OnInit {
   cartId:number=0;
   cart:any;
   isEditChecked:boolean=true;
+  toggleTabs:boolean=false;
+  productsList:Product[]=[];
 
   editedCustomer:any={
     custId:0,
@@ -45,14 +50,16 @@ export class UserprofileComponent implements OnInit {
     dateOfBirth:''
   }
 
-  constructor(private store:Store, private userService:UserServiceService, private cartService:CartserviceService) {
+  constructor(private store:Store, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
     this.store.select(selectCustomer).subscribe({
-      next:(data:any)=>{this.customer=data[0], this.editedCustomer=[...data],this.getCartId()}
+      next:(data:any)=>{this.customer=data[0],this.getCartId()}
+    })
+    this.productService.getAllProducts().subscribe({
+      next:(data:any)=>{this.productsList=data, console.log(this.productsList)}
     })
     
+    
    }
-
-
 
   ngOnInit(): void {
   }
@@ -68,8 +75,8 @@ export class UserprofileComponent implements OnInit {
  }
 
  getCustCart(){
-  this.cartService.getCartOfCustomer(1).subscribe({
-    next:(data:any)=>{this.cart=data, console.log(data)}
+  this.cartService.getCartOfCustomer(this.cartId).subscribe({
+    next:(data:any)=>{this.cart=data,console.log(data)}
   })
  }
  onCheckOfEdit(e:any){
@@ -87,9 +94,8 @@ export class UserprofileComponent implements OnInit {
     this.newPassword = e.target.value
   }
 
-
-  paswordMatch(e: any) {
-    if (this.password == this.newPassword) {
+  paswordMatch(e:any) {
+    if (this.password === this.newPassword) {
       this.isPasswordMatched = true
     } else {
       this.isPasswordMatched = false
@@ -97,18 +103,44 @@ export class UserprofileComponent implements OnInit {
   }
 
   save() {
-    this.userService.createCustomer(this.customer).subscribe((data:any)=>{console.log(data)})
+    //this.userService.createCustomer(this.editedCustomer).subscribe((data:any)=>{console.log(data)})
+    this.userService.updateCustomerFeilds(this.editedCustomer.firstName,this.editedCustomer.lastName,this.editedCustomer.password,this.editedCustomer.mobileNum,this.editedCustomer.mailId,this.editedCustomer.custId,this.editedCustomer).subscribe({
+      next:(data:any)=>console.log(data)
+    })
   }
 
-  
+  async encryptPassword(){
+    this.hashedPassword= bcrypt.hashSync(this.editForm.value.newPassword,this.salt);
+  }
+
+  onClickOnUserProfileEdit(){
+    this.toggleTabs=false;
+  }
+  onClickOnOrders(){
+    this.toggleTabs=true;
+  }
+
 
   onSubmit() {
     this.submitted = true
     if (this.editForm.valid) {
-      //this.customer=this.Form.value;
-      this.hashedPassword= bcrypt.hashSync(this.customer.password,this.salt);
-      //this.customer.password=this.hashedPassword;
-      //this.save();
+      if(this.isPasswordMatched){
+        alert('Passwords are same')
+      }else{
+        this.hashedPassword= bcrypt.hashSync(this.editForm.value.newPassword,this.salt)
+        this.editedCustomer.custId=this.customer.custId
+        this.editedCustomer.firstName=this.editForm.value.firstName
+        this.editedCustomer.lastName=this.editForm.value.lastName
+        this.editedCustomer.userName=this.customer.userName
+        this.editedCustomer.gender=this.customer.gender
+        this.editedCustomer.password=this.hashedPassword;
+        this.editedCustomer.dateOfBirth=this.customer.dateOfBirth
+        this.editedCustomer.mailId=this.editForm.value.mailId
+        this.editedCustomer.mobileNum=this.editForm.value.mobileNum
+        this.save();
+        alert("User Details Updated Sucessfully")
+      }
+      
     } else {
       alert('User form is not valid!!')
     }

@@ -22,11 +22,17 @@
                     
                 </li>
             </ul>
+            <div class="empty-cart" [hidden]="isCartCheckOut">
+                <p class="cart-product-name">Congratulations.. Your Order Placed</p>
+                <p class="product-quantity">We will bring happiness to your door step</p>
+                <button class="remove-button" (click)="goToHome()">Shop more</button>
+            </div>
             <div class="empty-cart" [hidden]="isCartHavingItems">
                 <p class="cart-product-name">Uh.. Uhooo..Your Cart is Empty</p>
                 <p class="product-quantity">Add items to cart</p>
                 <button class="remove-button" (click)="goToHome()">Shop now</button>
             </div>
+            
         </div>
         <div class="cart-checkout-container">
             <h1 class="checkout-price-heading">Price Details</h1>

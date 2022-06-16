@@ -1,45 +1,48 @@
 .up-bg-container{
     background-color: #000000;
-    background-size: cover;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
+    width: 100vw;
+    justify-content: flex-start;
 }
 .user-profile-container{
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    justify-content: space-around;
     width: 100vw;
     margin-top: 10px;
 }
 .user-profile-list{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-    width: 39vw;
+    width: 25vw;
     margin-right: 10px;
     border-radius: 10px;
+    height: 80vh;
+    margin-left: 25px;
 }
 .user-profile-personal-details{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
-    width: 60vw;
+    width: 65vw;
     border-radius: 10px;
 }
 .pro-pic-container{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 30vw;
-    background-color: rgb(94, 107, 117);
+    width: 250px;
     border-radius: 10px;
     margin-bottom: 10px;
     height: 100px;
+    margin-left: 20px;
 }
 .pro-pic{
     height: 75px;
@@ -61,8 +64,35 @@
     font-family: sans-serif;
     font-size: 17px;
     color: #fffcfc;
-    font-weight: 500;
+    font-weight: 600;
     margin-right: 2px;
+}
+.account-settings{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 30vw;
+    list-style-type: none;
+}
+.account-settings-list{
+    list-style-type: none;
+}
+.account-settings-list-element{
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 250px;
+    background-color: rgb(94, 107, 117);
+    margin-bottom: 5px;
+    border-radius: 10px;
+    padding-left: 3px;
 }
 .personal-details-edit{
     display: flex;
@@ -90,6 +120,15 @@ color: #ffffff;
 font-weight: 500;
 font-size: 15px;
 margin-bottom: 5px;
+text-decoration: none;
+}
+.label-1{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+color: #ffffff;
+font-weight: 600;
+font-size: 19px;
+margin-bottom: 10px;
 text-decoration: none;
 }
 .login-input-element {
@@ -141,4 +180,66 @@ border-style: none;
 border-radius: 5px;
 background-color: #4f46e5;
 height: 40px;
+}
+.account-settings-list-1{
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 10px;
+    width: 60vw;
+    background-color: #424a5c;
+    padding: 10px;
+    box-shadow: 2px 1px 2px 2px rgba(202, 204, 204, 0.39);
+}
+.order-details{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 57vw;
+    height: 25px;
+    border-bottom: 1px solid #898bf560;
+}
+.account-settings-list-2{
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    width: 57vw;
+    background-color:transparent;
+    padding-top: 10px;
+    
+}
+.order-item-list-item{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 200px;
+    height: 70px;
+    border-radius: 5px;
+    background-color: #a3a3a3;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    padding: 10px;
+    
+}
+.prod-image{
+    height: 60px;
+    width: 60px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 5px;
+    margin-right: 10px;
+}
+.product-name-qty-cont{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }

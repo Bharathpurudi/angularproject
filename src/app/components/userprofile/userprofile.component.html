@@ -3,22 +3,23 @@
     <div class="user-profile-container">
         <div class="user-profile-list">
             <div class="pro-pic-container">
-                <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1637651836/BharathPurudiPP_vckyod.jpg" class="pro-pic"/>
+                <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1655382973/pngwing.com_ysfazm.png" class="pro-pic"/>
                 <div class="welcome-msg-container">
                     <p class="welcome-msg">Hello...</p>
                     <p class="user-name">{{customer.firstName}}</p>
                 </div>
             </div>
             <div class="account-settings">
-                <ul>
-                    <li>Personal Details</li>
-                    <li>Orders</li>
+                <ul class="account-settings-list">
+                    <li class="account-settings-list-element"  (click)="onClickOnUserProfileEdit()">Edit Personal Details</li>
+                    <li class="account-settings-list-element" (click)="onClickOnOrders()" >Orders</li>
                 </ul>
             </div>
         </div>
         <div class="user-profile-personal-details">
+           <div [hidden]="toggleTabs">
             <div class="personal-details-edit">
-                <p class="label">User Personal Details</p>
+                <p class="label-1">User Personal Details</p>
             <div>
                 <label class="label">
                     Edit
@@ -66,13 +67,14 @@
                             New Password
                         </label>
                         <input type="password" formControlName="newPassword" class="login-input-element"
-                            name="confirmpassword-input" placeholder="Enter same as above"
+                            name="confirmpassword-input" placeholder="New password (Use AlphaNum combo)"
                             (change)="onEnterConfirmPassword($event)" (change)="paswordMatch($event)"
                             [ngClass]="{'is-invalid':  submitted && form['newPassword'].errors }" [readonly]="isEditChecked"  />
                         <div *ngIf="submitted && form['newPassword'].errors" class="invalid-feedback">
-                            <div *ngIf="form['newPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&
-                            </div>
-                            <div *ngIf="submitted || isPasswordMatched">Both the passwords should match</div>
+                            <div *ngIf="form['newPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&</div>
+                        </div>
+                        <div *ngIf="submitted && isPasswordMatched" class="invalid-feedback">
+                            <div *ngIf="submitted && isPasswordMatched">Old & new passwords should not be same</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -106,6 +108,32 @@
         
                 </form>
             </div>
+           </div>
+           <div [hidden]="!toggleTabs">
+               <div class="orders-container">
+                   <h1 class="label-1">Voila..! Here your orders</h1>
+                <ul class="account-settings-list-1" *ngFor="let order of cart.orderEntities">
+                    <li class="order-details">
+                        <p class="label">Order Id: {{order.orderId}}</p>
+                        <p class="label">Order Date: {{order.orderDate}}</p>
+                        <p class="label">Order Amount: {{order.orderAmount}}</p>
+                    </li>
+                    <div class="account-settings-list-2">
+                        <ul class="account-settings-list" *ngFor="let orderProduct of order.orderProducts" >
+                            <div *ngFor="let product of productsList">
+                                <li class="order-item-list-item" *ngIf="product.productId==orderProduct.productId">
+                                        <img src={{product.imageUrl}} class="prod-image"/>
+                                    <div class="product-name-qty-cont">
+                                        <p class="label">{{product.productName}}</p>
+                                        <p class="label">Qty: {{orderProduct.quantity}}</p>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </ul>
+               </div>
+           </div>
         </div>
     </div>
 </div>

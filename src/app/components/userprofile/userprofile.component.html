@@ -122,10 +122,10 @@
                         <ul class="account-settings-list" *ngFor="let orderProduct of order.orderProducts" >
                             <div *ngFor="let product of productsList">
                                 <li class="order-item-list-item" *ngIf="product.productId==orderProduct.productId">
-                                        <img src={{product.imageUrl}} class="prod-image"/>
+                                        <img src={{product.imageUrl}} class="prod-image" (click)="goToSpecificProductPage(product.productId)"/>
                                     <div class="product-name-qty-cont">
-                                        <p class="label">{{product.productName}}</p>
-                                        <p class="label">Qty: {{orderProduct.quantity}}</p>
+                                        <p class="label-2">{{product.productName}}</p>
+                                        <p class="label-2">Qty: {{orderProduct.quantity}}</p>
                                     </div>
                                 </li>
                             </div>

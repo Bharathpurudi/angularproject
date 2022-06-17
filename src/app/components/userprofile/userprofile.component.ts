@@ -120,6 +120,10 @@ export class UserprofileComponent implements OnInit {
     this.toggleTabs=true;
   }
 
+  goToSpecificProductPage(id:number){
+    
+  }
+
 
   onSubmit() {
     this.submitted = true

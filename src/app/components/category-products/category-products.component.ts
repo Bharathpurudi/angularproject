@@ -2,6 +2,8 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
+import { specifcProduct } from 'src/app/cart-state-store/cart.actions';
+import { selectFilteredProducts } from 'src/app/cart-state-store/cart.selector';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Customer } from 'src/app/EntityModels/Customer';
 import { Product } from 'src/app/EntityModels/Product';
@@ -20,6 +22,9 @@ export class CategoryProductsComponent implements OnInit {
     this.productsFound=storeService.getProductsFoundVar();
     this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data[0]))
     this.renderProducts(this.category)
+    this.store.select(selectFilteredProducts).subscribe({
+      next:(data:any)=>{console.log(data),console.log(this.objDestructure(data))}
+    })
   }
 
   
@@ -61,6 +66,13 @@ export class CategoryProductsComponent implements OnInit {
     
   }
 
+
+  objDestructure(data:any){
+    const desList:any[]=Object.keys(data).map((key) => data[key]);
+    return desList;
+
+  }
+
   validateProductsList(){
     if(this.productsListLength===0){
       this.isNoProducts=false;
@@ -70,6 +82,7 @@ export class CategoryProductsComponent implements OnInit {
   specificProduct(productName:string){
     this.tempProdList=this.productsList.filter((product: { productName: string; })=>product.productName===productName)
     this.currentProduct=this.tempProdList[0];
+    this.store.dispatch(specifcProduct(this.currentProduct))
     this.storeService.setProduct(this.currentProduct);
     this.router.navigate(['/specificproduct'])
   }

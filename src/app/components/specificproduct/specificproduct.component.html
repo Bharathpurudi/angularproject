@@ -7,7 +7,7 @@
             <h1 class="product-title">{{product.productName}}</h1>
             <div class="rating-container">
                 <p class="product-rating">Rating: </p>
-                <div class="crop" [style.width.px]="5*20">
+                <div class="crop" [style.width.px]="product.rating*20">
                     <div style="width: 120px">
                         <span class="fa fa-star star-color"></span>
                         <span class="fa fa-star star-color"></span>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <h1 class="description">Description: <span class="product-description">{{product.imageUrl}}</span></h1>
+            <h1 class="description">Description: <span class="product-description">{{product.description}}</span></h1>
             <div class="add-cart-container">
                 <button class="add-cart-button" [hidden]="productAdded" (click)="addToCart()">Add to Cart</button>
                 <button class="add-cart-button" [hidden]="!productAdded" (click)="goToCart()">Go to Cart</button>

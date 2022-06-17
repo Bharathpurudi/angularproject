@@ -34,3 +34,17 @@ export const selectCartId=createSelector(
     return state;
   }
 )
+
+export const selectSpecificProduct=createSelector(
+  createFeatureSelector('specificProductEntry'),
+  (state:Product)=>{
+    return state;
+  }
+)
+
+export const selectFilteredProducts=createSelector(
+  createFeatureSelector('filteredProductsEntry'),
+  (state:any[])=>{
+    return state;
+  }
+)

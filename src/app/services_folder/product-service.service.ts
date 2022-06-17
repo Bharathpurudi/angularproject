@@ -16,6 +16,10 @@ export class ProductServiceService {
     return this.http.get(`${this.baseUrl}/getAllProducts/${category}`)
   }
 
+  getProduct(id:number):Observable<any>{
+    return this.http.get(`${this.baseUrl}/getproduct/${id}`)
+  }
+
   getProductsLike(category:string):Observable<any>{
     return this.http.get(`${this.baseUrl}/getAllProductsLike/${category}`)
   }

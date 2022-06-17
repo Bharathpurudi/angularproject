@@ -1,7 +1,4 @@
 
-interface setQuantity {
-    (a: number):void;
-  }
   
 export class Product{
     expired: boolean=true;
@@ -14,16 +11,7 @@ export class Product{
     productPrice:number= 0;
     stockQuantity:number= 0;
     warrantyId:number= 0;
-
-    
-
-//    setQuan(qty: number){
-//        this.stockQuantity=qty
-//     };
-      
-    
-//     // public set setQuantity(qty:number){
-//     //     this.stockQuantity=qty;
-//     // }
+    rating:number=0;
+    description:string="";
 
 }

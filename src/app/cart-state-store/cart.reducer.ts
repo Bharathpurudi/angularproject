@@ -2,11 +2,15 @@ import { state } from "@angular/animations";
 import { ActionReducer, createReducer,INIT,on, UPDATE } from "@ngrx/store";
 import { OrderProducts } from "../EntityModels/OrderProducts";
 import { Product } from "../EntityModels/Product";
-import { addProduct,removeProduct,clearCart, cartId, addUpdatedQunatityProduct, removeUpdatedQtyProd} from "./cart.actions";
+import { addProduct,removeProduct,clearCart, cartId, addUpdatedQunatityProduct, removeUpdatedQtyProd, specifcProduct, filteredProducts} from "./cart.actions";
 
 export const initialCartProducts:Product[]=[];
 
+export const initialProducts:any=[];
+
 export const initialUpdtProdQty:OrderProducts[]=[];
+
+export const initialProduct:Product=new Product();
 
 export const initialCartId:Number=0;
 
@@ -58,6 +62,22 @@ on(removeUpdatedQtyProd,(entries,product)=>{
   return addedProducts;
 })
 
+)
+export const specificProductReducer=createReducer(
+  initialProduct,
+  on(specifcProduct,(entries,product)=>{
+      entries=product
+      return entries;
+  })
+
+)
+
+export const filteredProductsReducer=createReducer(
+  initialProducts,
+  on(filteredProducts,(entries,products)=>{
+    entries=products
+    return entries
+  })
 )
 
 

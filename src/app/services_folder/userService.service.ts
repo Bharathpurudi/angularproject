@@ -28,4 +28,12 @@ export class UserServiceService {
     return this.http.put(`${this.baseUrl}/updateFeilds/${firstName}/${lastName}/${password}/${mobileNum}/${mailId}/${custId}`,value);
   }
 
+  addCustAddress(address:any):Observable<Object>{
+    return this.http.post(`${this.baseUrl}/addaddress`,address);
+  }
+
+  getCustAddresses(id:number):Observable<any>{
+    return this.http.get(`${this.baseUrl}/getaddressesofcust/${id}`)
+  }
+
 }

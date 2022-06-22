@@ -6,9 +6,11 @@ import { Customer } from 'src/app/EntityModels/Customer';
 import { UserServiceService } from 'src/app/services_folder/userService.service';
 import * as bcrypt from 'bcryptjs';
 import { CartserviceService } from 'src/app/services_folder/cartservice.service';
-import { Observable } from 'rxjs';
 import { Product } from 'src/app/EntityModels/Product';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
+import { specifcProduct } from 'src/app/cart-state-store/cart.actions';
+import { Router } from '@angular/router';
+import { Address } from 'src/app/EntityModels/Address';
 
 @Component({
   selector: 'app-userprofile',
@@ -17,6 +19,7 @@ import { ProductServiceService } from 'src/app/services_folder/product-service.s
 })
 export class UserprofileComponent implements OnInit {
   customer:Customer=new Customer;
+  custAddress!: Address;
   editForm = new UntypedFormGroup({
     firstName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
     lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
@@ -26,7 +29,17 @@ export class UserprofileComponent implements OnInit {
     mobileNum: new UntypedFormControl('', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],),
   },
   );
+
+  addressForm= new UntypedFormGroup({
+    doorNo: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9 /-]+$')]),
+    streetName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+    city: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+    state: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+    pincode: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9]{6}")],)
+  })
   submitted:boolean=false;
+  addressSubmitted:boolean=false;
+  isAddAddressChecked:boolean=true;
   password:string="";
   newPassword:string="";
   isPasswordMatched:boolean=false;
@@ -36,7 +49,11 @@ export class UserprofileComponent implements OnInit {
   cart:any;
   isEditChecked:boolean=true;
   toggleTabs:boolean=false;
+  clickedOnAddress:boolean=true;
+  clickedOnPerProfile:boolean=false;
+  clickedOnOrders:boolean=true;
   productsList:Product[]=[];
+  addressesList:Address[]=[];
 
   editedCustomer:any={
     custId:0,
@@ -50,15 +67,18 @@ export class UserprofileComponent implements OnInit {
     dateOfBirth:''
   }
 
-  constructor(private store:Store, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
+  
+
+  constructor(private store:Store,private router: Router, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
     this.store.select(selectCustomer).subscribe({
       next:(data:any)=>{this.customer=data[0],this.getCartId()}
     })
     this.productService.getAllProducts().subscribe({
-      next:(data:any)=>{this.productsList=data, console.log(this.productsList)}
+      next:(data:any)=>{this.productsList=data}
     })
-    
-    
+    this.userService.getCustAddresses(this.customer.custId).subscribe({
+      next:(data:any)=>{this.addressesList=data}
+    })
    }
 
   ngOnInit(): void {
@@ -68,6 +88,13 @@ export class UserprofileComponent implements OnInit {
     return this.editForm.controls;
   }
 
+  get addForm(){
+    return this.addressForm.controls;
+
+  }
+
+
+
  getCartId(){
    this.cartService.getcartId(this.customer.custId).subscribe({
      next:(data:any)=>{this.cartId=data,this.getCustCart()}
@@ -76,7 +103,7 @@ export class UserprofileComponent implements OnInit {
 
  getCustCart(){
   this.cartService.getCartOfCustomer(this.cartId).subscribe({
-    next:(data:any)=>{this.cart=data,console.log(data)}
+    next:(data:any)=>{this.cart=data}
   })
  }
  onCheckOfEdit(e:any){
@@ -84,6 +111,13 @@ export class UserprofileComponent implements OnInit {
     this.isEditChecked=false
    }else{
     this.isEditChecked=true
+   }
+ }
+ onCheckOfAddAddress(e:any){
+  if(e.target.checked===true){
+    this.isAddAddressChecked=false
+   }else{
+    this.isAddAddressChecked=true
    }
  }
   onEnterPassword(e: any) {
@@ -102,8 +136,20 @@ export class UserprofileComponent implements OnInit {
     }
   }
 
+  addAddress(){
+    this.addressSubmitted=true;
+    if(this.addressForm.valid){
+      console.log(this.addressForm.value)
+      console.log(this.customer)
+      this.custAddress=new Address(0,this.addressForm.value.city,this.customer.custId,this.addressForm.value.doorNo,this.addressForm.value.pincode,this.addressForm.value.state,this.addressForm.value.streetName);
+      this.userService.addCustAddress(this.custAddress).subscribe({
+        next:(data:any)=>{console.log(data)}
+      })
+      
+    }
+  }
+
   save() {
-    //this.userService.createCustomer(this.editedCustomer).subscribe((data:any)=>{console.log(data)})
     this.userService.updateCustomerFeilds(this.editedCustomer.firstName,this.editedCustomer.lastName,this.editedCustomer.password,this.editedCustomer.mobileNum,this.editedCustomer.mailId,this.editedCustomer.custId,this.editedCustomer).subscribe({
       next:(data:any)=>console.log(data)
     })
@@ -114,15 +160,30 @@ export class UserprofileComponent implements OnInit {
   }
 
   onClickOnUserProfileEdit(){
-    this.toggleTabs=false;
+    this.clickedOnAddress=true
+    this.clickedOnOrders=true
+    this.clickedOnPerProfile=false
+    this.isAddAddressChecked=true
   }
   onClickOnOrders(){
-    this.toggleTabs=true;
+    this.clickedOnOrders=false
+    this.clickedOnPerProfile=true
+    this.clickedOnAddress=true
+    this.isAddAddressChecked=true
+  }
+  onClickOnAdresses(){
+    this.clickedOnOrders=true
+    this.clickedOnPerProfile=true
+    this.clickedOnAddress=false;
+
   }
 
   goToSpecificProductPage(id:number){
-    
+    const tempProdList=this.productsList.filter((product =>product.productId===id))
+    this.store.dispatch(specifcProduct(tempProdList[0]))
+    this.router.navigate(['/specificproduct'])
   }
+
 
 
   onSubmit() {

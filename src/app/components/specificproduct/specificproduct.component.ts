@@ -2,12 +2,10 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { addProduct, addUpdatedQunatityProduct } from 'src/app/cart-state-store/cart.actions';
-import { productsCount, selectGroupedCartEntries, selectSpecificProduct } from 'src/app/cart-state-store/cart.selector';
+import { selectSpecificProduct } from 'src/app/cart-state-store/cart.selector';
 import { OrderProducts } from 'src/app/EntityModels/OrderProducts';
 import { Product } from 'src/app/EntityModels/Product';
-import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
 
 @Component({
   selector: 'app-specificproduct',
@@ -26,7 +24,7 @@ export class SpecificproductComponent implements OnInit {
   productExpired:boolean=false;
   outOfStock:boolean=true;
 
-  constructor(private storeService:StoreserviceService, private store: Store,public datepipe: DatePipe, private router:Router) {
+  constructor( private store: Store,public datepipe: DatePipe, private router:Router) {
     this.store.select(selectSpecificProduct).subscribe({
       next:(data:any)=>{this.product=data,
         this.productExpireDate=this.getProductExpireDate()
@@ -70,10 +68,8 @@ export class SpecificproductComponent implements OnInit {
       alert("Product is near to expire date")
     }else{
     this.productAdded=true;
-    this.storeService.setCartProducts(this.product)
     this.store.dispatch(addProduct(this.product))
     this.store.dispatch(addUpdatedQunatityProduct(this.orderProduct))
-    this.store.select(selectGroupedCartEntries).subscribe((data:any)=>(console.log(data)))
     }
   }
 

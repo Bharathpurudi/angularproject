@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
+import { filteredProducts } from 'src/app/cart-state-store/cart.actions';
 import { productsCount } from 'src/app/cart-state-store/cart.selector';
 import { removeCustomer } from 'src/app/customer-state-store/customer.action';
+import { Product } from 'src/app/EntityModels/Product';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
-import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
+
 
 @Component({
   selector: 'header',
@@ -16,7 +18,7 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 export class HeaderComponent implements OnInit {
 
   countProducts$:Observable<number>;
-  constructor(private router: Router, private storeService:StoreserviceService,private cookies:CookieService, private productsService:ProductServiceService, private store:Store) {
+  constructor(private router: Router,private productService:ProductServiceService,private cookies:CookieService, private store:Store) {
     this.countProducts$=store.select(productsCount)
    }
   categoriesArray:string[]=["Electronics","Grocery","Fashion","Appliances","Beauty","Furniture"];
@@ -25,6 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   searchedInput:string='';
+  productsList:Product[]=[];
 
   logoutFunction(){
     this.router.navigate(['/login']);
@@ -51,15 +54,30 @@ export class HeaderComponent implements OnInit {
     this.searchedInput=e.target.value
   }
 
+  storeProducts(data:any){
+    this.store.dispatch(filteredProducts(data))
+  }
+
+  capitalizeFirstLetter(value:string) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
   onsubmitSearch(){
-    if(this.categoriesArray.includes(this.searchedInput)){
-      this.storeService.setProductsFoundVar(true)
-      this.storeService.setMyVariable(this.searchedInput);
-      this.productsPage()
+    
+    if(this.categoriesArray.includes(this.capitalizeFirstLetter(this.searchedInput))){
+      this.productService.getProducts(this.searchedInput).subscribe({
+        next:(data:any)=>{this.storeProducts(data),this.productsPage()
+        }
+      })
     }else{
-      this.storeService.setMyVariable(this.searchedInput);
-      this.storeService.setProductsFoundVar(false)
-      this.productsPage()
+      let tempProductsList:Product[]=[]
+      this.productService.getAllProducts().subscribe({
+        next:(data:any)=> {tempProductsList=data,
+          this.productsList=tempProductsList.filter(e=>e.productName.toLocaleLowerCase().includes(this.searchedInput)),
+          this.storeProducts(this.productsList),
+          this.productsPage()
+          }
+      })
     }
     
   }

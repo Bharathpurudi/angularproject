@@ -8,7 +8,7 @@ import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Customer } from 'src/app/EntityModels/Customer';
 import { Product } from 'src/app/EntityModels/Product';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
-import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
+
 
 @Component({
   selector: 'category-products',
@@ -17,13 +17,10 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class CategoryProductsComponent implements OnInit {
 
-  constructor(private router:Router, private cookies:CookieService,private store:Store, private productService:ProductServiceService,private storeService:StoreserviceService) { 
-    this.category=storeService.getMyVariable();
-    this.productsFound=storeService.getProductsFoundVar();
+  constructor(private router:Router, private cookies:CookieService,private store:Store, private productService:ProductServiceService) { 
     this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data[0]))
-    this.renderProducts(this.category)
     this.store.select(selectFilteredProducts).subscribe({
-      next:(data:any)=>{console.log(data),console.log(this.objDestructure(data))}
+      next:(data:any)=>{this.productsList=this.objDestructure(data),this.validateProductsList(data)}
     })
   }
 
@@ -32,59 +29,32 @@ export class CategoryProductsComponent implements OnInit {
   ngOnInit(): void {
     
   }
-  currentProduct :Product= new Product();
+
   tempProdList:Product[]=[];
-  category:string='';
   productsList:any[]|any;
-  productsFound:boolean=false;
   customer:Customer=new Customer;
   isNoProducts:boolean=true;
-  productsListLength:number=0;
 
-  renderProducts(category:string){
-    if(this.productsFound===true){
-      this.productService.getProducts(category).subscribe({
-        next:(data:any)=>{this.productsList=data,
-          this.storeService.setProductsFoundVar(false),
-          this.productsListLength=this.productsList.length,
-          this.validateProductsList()
-        }
-      })
+  
+  objDestructure(data:any){
+    let desList:any[]=Object.keys(data).map((key) => data[key]);
+    return desList.filter(e=>typeof(e)==="object");
+  }
+
+  validateProductsList(data:any){
+    let desList:any[]=Object.keys(data).map((key) => data[key]);
+    const tempList=desList.filter(e=>typeof(e)==="object")
+    if(tempList.length<=0){
+      this.isNoProducts=false
     }else{
-      let tempProductsList:Product[]=[]
-      this.productService.getAllProducts().subscribe({
-        next:(data:any)=> {tempProductsList=data,
-          this.productsList=tempProductsList.filter(e=>e.productName.toLocaleLowerCase().includes(category)),
-          this.storeService.setProductsFoundVar(true),
-          this.productsListLength=this.productsList.length,
-          this.validateProductsList()
-          }
-      })
-      
-      
+      this.isNoProducts=true
     }
     
   }
 
-
-  objDestructure(data:any){
-    const desList:any[]=Object.keys(data).map((key) => data[key]);
-    return desList;
-
-  }
-
-  validateProductsList(){
-    if(this.productsListLength===0){
-      this.isNoProducts=false;
-    }
-  }
-
   specificProduct(productName:string){
     this.tempProdList=this.productsList.filter((product: { productName: string; })=>product.productName===productName)
-    this.currentProduct=this.tempProdList[0];
-    this.store.dispatch(specifcProduct(this.currentProduct))
-    this.storeService.setProduct(this.currentProduct);
+    this.store.dispatch(specifcProduct(this.tempProdList[0]))
     this.router.navigate(['/specificproduct'])
   }
-
 }

@@ -3,22 +3,24 @@
     <div class="user-profile-container">
         <div class="user-profile-list">
             <div class="pro-pic-container">
-                <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1637651836/BharathPurudiPP_vckyod.jpg" class="pro-pic"/>
+                <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1655382973/pngwing.com_ysfazm.png" class="pro-pic"/>
                 <div class="welcome-msg-container">
                     <p class="welcome-msg">Hello...</p>
                     <p class="user-name">{{customer.firstName}}</p>
                 </div>
             </div>
             <div class="account-settings">
-                <ul>
-                    <li>Personal Details</li>
-                    <li>Orders</li>
+                <ul class="account-settings-list">
+                    <li class="account-settings-list-element"  (click)="onClickOnUserProfileEdit()">Edit Personal Details</li>
+                    <li class="account-settings-list-element" (click)="onClickOnOrders()" >Orders</li>
+                    <li class="account-settings-list-element" (click)="onClickOnAdresses()">Addresses</li>
                 </ul>
             </div>
         </div>
         <div class="user-profile-personal-details">
+           <div [hidden]="clickedOnPerProfile">
             <div class="personal-details-edit">
-                <p class="label">User Personal Details</p>
+                <p class="label-1">User Personal Details</p>
             <div>
                 <label class="label">
                     Edit
@@ -66,13 +68,14 @@
                             New Password
                         </label>
                         <input type="password" formControlName="newPassword" class="login-input-element"
-                            name="confirmpassword-input" placeholder="Enter same as above"
+                            name="confirmpassword-input" placeholder="New password (Use AlphaNum combo)"
                             (change)="onEnterConfirmPassword($event)" (change)="paswordMatch($event)"
                             [ngClass]="{'is-invalid':  submitted && form['newPassword'].errors }" [readonly]="isEditChecked"  />
                         <div *ngIf="submitted && form['newPassword'].errors" class="invalid-feedback">
-                            <div *ngIf="form['newPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&
-                            </div>
-                            <div *ngIf="submitted || isPasswordMatched">Both the passwords should match</div>
+                            <div *ngIf="form['newPassword'].errors['required']">Password should contain AlphaNumeric and @$!%*?&</div>
+                        </div>
+                        <div *ngIf="submitted && isPasswordMatched" class="invalid-feedback">
+                            <div *ngIf="submitted && isPasswordMatched">Old & new passwords should not be same</div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -106,6 +109,125 @@
         
                 </form>
             </div>
+           </div>
+           <div [hidden]="clickedOnOrders">
+               <div class="orders-container">
+                   <h1 class="label-1">Voila..! Here your orders</h1>
+                <ul class="account-settings-list-1" *ngFor="let order of cart.orderEntities">
+                    <li class="order-details">
+                        <p class="label">Order Id: {{order.orderId}}</p>
+                        <p class="label">Order Date: {{order.orderDate}}</p>
+                        <p class="label">Order Amount: {{order.orderAmount}}</p>
+                    </li>
+                    <div class="account-settings-list-2">
+                        <ul class="account-settings-list" *ngFor="let orderProduct of order.orderProducts" >
+                            <div *ngFor="let product of productsList">
+                                <li class="order-item-list-item" *ngIf="product.productId==orderProduct.productId">
+                                        <img src={{product.imageUrl}} class="prod-image" (click)="goToSpecificProductPage(product.productId)"/>
+                                    <div class="product-name-qty-cont">
+                                        <p class="label-2">{{product.productName}}</p>
+                                        <p class="label-2">Qty: {{orderProduct.quantity}}</p>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </ul>
+               </div>
+           </div>
+           <div [hidden]="clickedOnAddress">
+            <div class="personal-details-edit">
+                <p class="label-1">User adresses</p>
+            <div>
+                <label class="label">
+                    Add new address
+                </label>
+                <input class="checkbox-show" type="checkbox" id="addressCheckBox" (change)="onCheckOfAddAddress($event)" >
+            </div>
+            </div>
+            <div [hidden]="isAddAddressChecked">
+                <form class="signup-form" [formGroup]="addressForm" >
+                    <div class="form-group">
+                        <label class="label">
+                            Door No:
+                        </label>
+                        <input type="text" formControlName="doorNo" class="login-input-element" placeholder="Ex: 25/5B-2"
+                            [ngClass]="{ 'is-invalid': addressSubmitted && addForm['doorNo'].errors }" />
+                        <div *ngIf="addressSubmitted && addForm['doorNo'].errors" class="invalid-feedback">
+                            <div *ngIf="addForm['doorNo'].errors['required']">Door no is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">
+                            Street name:
+                        </label>
+                        <input type="text" formControlName="streetName" class="login-input-element" placeholder="Ex: Gandhi Road"
+                            [ngClass]="{'is-invalid': addressSubmitted && addForm['streetName'].errors }"/>
+                        <div *ngIf="addressSubmitted && addForm['streetName'].errors" class="invalid-feedback">
+                            <div *ngIf="addForm['streetName'].errors['required']">Street Name is required</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="label">
+                           City name:
+                        </label>
+                        <input type="text" formControlName="city" class="login-input-element"
+                            placeholder="Ex: Rayadurg" (change)="onEnterPassword($event)" 
+                            [ngClass]="{'is-invalid': addressSubmitted && addForm['city'].errors }" />
+                        <div *ngIf="addressSubmitted && addForm['city'].errors" class="invalid-feedback">
+                            <div *ngIf="addForm['city'].errors['required']">City name is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobilenum-input" class="label">
+                            State name:
+                        </label>
+                        <input type="text" class="login-input-element" formControlName="state"
+                            placeholder="Ex: Andhra Pradesh"
+                            [ngClass]="{'is-invalid': addressSubmitted && addForm['state'].errors }" />
+                        <div *ngIf="addressSubmitted && addForm['state'].errors" class="invalid-feedback">
+                            <div *ngIf="addForm['state'].errors['required']">State name is required.</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobilenum-input" class="label">
+                            Pincode:
+                        </label>
+                        <input type="number" class="login-input-element" formControlName="pincode"
+                            placeholder="Ex: 515865"
+                            [ngClass]="{'is-invalid': addressSubmitted && addForm['pincode'].errors }" />
+                        <div *ngIf="addressSubmitted && addForm['pincode'].errors" class="invalid-feedback">
+                            <div *ngIf="addForm['pincode'].errors['required']">Pincode is required.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button class="login-button" (click)="addAddress()">
+                            Add address
+                        </button>
+                    </div>
+        
+                </form>
+            </div>
+            <div [hidden]="!isAddAddressChecked" class="addresses-list">
+                <ul *ngFor="let address of addressesList ; index as i" >
+                    <li class="address-list-element">
+                        <div class="delete-address-container">
+                            <p class="address-title">Address {{i+1}}</p>
+                            <button class="delete-address-button" (click)="deleteUserAddress(address.addressId)">
+                                <i class="bi bi-trash3 trash-class"></i>
+                            </button>
+                        </div>
+                        <p class="address-detail">Door No: {{address.doorNo}}</p>
+                        <p class="address-detail">Street Name: {{address.streetName}}</p>
+                        <p class="address-detail">City: {{address.city}}</p>
+                        <p class="address-detail">State: {{address.state}}</p>
+                        <p class="address-detail">Pincode: {{address.pincode}}</p>
+                    </li>
+                </ul>
+            </div>
+           </div>
         </div>
     </div>
 </div>

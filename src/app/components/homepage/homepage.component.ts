@@ -1,13 +1,11 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
+import { filteredProducts } from 'src/app/cart-state-store/cart.actions';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
 import { Customer } from 'src/app/EntityModels/Customer';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
-import { StoreserviceService } from 'src/app/services_folder/storeservice.service';
+
 
 @Component({
   selector: 'homepage',
@@ -16,7 +14,7 @@ import { StoreserviceService } from 'src/app/services_folder/storeservice.servic
 })
 export class HomepageComponent implements OnInit {
 
-  constructor(private router:Router, private productService:ProductServiceService,private cookies:CookieService, private storeService:StoreserviceService, private store:Store) { 
+  constructor(private router:Router, private productService:ProductServiceService,  private store:Store) { 
     this.store.select(selectCustomer).subscribe((data:any)=>(this.customer=data[0]))
   }
 
@@ -64,12 +62,14 @@ customer : Customer = new Customer();
     this.router.navigate(['/products']);
   }
 
+  storeProducts(data:any){
+    this.store.dispatch(filteredProducts(data))
+  }
+
   clickOnCategory(category:string){
-    const jwtToken = this.cookies.get('jwt_token')
-    const parsedJwt = JSON.parse(atob(jwtToken.split('.')[1]))
-    this.storeService.setMyVariable(category);
-    this.storeService.setProductsFoundVar(true);
-    this.goToProductsPage();
+    this.productService.getProducts(category).subscribe({
+      next:(data:any)=>{this.storeProducts(data),this.goToProductsPage()}
+    })
   }
 
 

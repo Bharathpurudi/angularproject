@@ -18,6 +18,9 @@ import * as bcrypt from 'bcryptjs';
 export class LoginpageComponent implements OnInit {
 
   state = { userName: "", password: "", passwordType: "password", errorMsg: "", isLogin:false}
+  updateState={updateUserName:"",newPassword:"",confirmPassword:""}
+  isForgotPasswordClicked:boolean=false;
+  salt = bcrypt.genSaltSync(10);
 
   customer: Customer = new Customer;
 
@@ -45,9 +48,37 @@ export class LoginpageComponent implements OnInit {
   getCustomerDetails() {
     this.userService.getCustomer(this.state.userName).subscribe(
      {
-       next:(data:any)=>{this.customer=data,this.validateLogin(data),console.log(data)}
+       next:(data:any)=>{this.customer=data,this.validateLogin(data)}
      }
     )
+  }
+
+  forgotPassword(){
+    this.isForgotPasswordClicked=true
+  }
+
+  validateForgotPassword(data:any){
+    if(data!=null){
+      alert("Password updated sucessfully")
+      this.isForgotPasswordClicked=false
+    }else{
+      alert("No user name found")
+    }
+  }
+
+  updatePassword(){
+    if(this.updateState.updateUserName=="" && this.updateState.newPassword=="" && this.updateState.confirmPassword==""){
+      this.state.errorMsg="Enter the correct Credentials"
+    }else if(this.updateState.newPassword!=this.updateState.confirmPassword){
+      this.state.errorMsg="Entered Passwords are not matching"
+    }else{
+      const encryptedNewPassword=bcrypt.hashSync(this.updateState.confirmPassword,this.salt);
+      this.userService.updateCustPassword(this.updateState.updateUserName,encryptedNewPassword,this.customer).subscribe({
+        next:(data:any)=>{
+          {this.validateForgotPassword(data)}
+        }
+      })
+    }
   }
 
    validateLogin(data:any) {
@@ -61,13 +92,10 @@ export class LoginpageComponent implements OnInit {
         this.cookies.set('jwt_token', parsedData.JWT,{expires:3})
         this.gotoHome()
         }
-        
       })
      
     } else {
       this.state.errorMsg = "Wrong Login Credentials"
-      console.log(data.password)
-      console.log(bcrypt.compareSync(data.password,this.state.password))
     }
   }
 
@@ -86,6 +114,11 @@ export class LoginpageComponent implements OnInit {
   goToSignUp(){
     this.router.navigate(['/signup']);
   }
+
+  goToLogin(){
+    this.router.navigate(['/login']);
+  }
+
 
 
 }

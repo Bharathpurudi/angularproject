@@ -1,4 +1,4 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {HttpClientModule} from '@angular/common/http'
@@ -15,11 +15,10 @@ import { UserprofileComponent } from './components/userprofile/userprofile.compo
 import { ComponentStore } from '@ngrx/component-store';
 import { CategoryProductsComponent } from './components/category-products/category-products.component';
 import { CartComponent } from './components/cart/cart.component';
-import { StoreserviceService } from './services_folder/storeservice.service';
 import { ProductServiceService } from './services_folder/product-service.service';
 import { SpecificproductComponent } from './components/specificproduct/specificproduct.component';
 import { StoreModule } from '@ngrx/store';
-import { cartIdReducer, cartReducer, metaReducerLocalStorage, updateProdQtyReducer } from './cart-state-store/cart.reducer';
+import { cartIdReducer, cartReducer, filteredProductsReducer, metaReducerLocalStorage, specificProductReducer, updateProdQtyReducer } from './cart-state-store/cart.reducer';
 import { StarRatingModule } from 'angular-rating-star';
 import { customerReducer } from './customer-state-store/customer.reducer';
 
@@ -44,10 +43,10 @@ import { customerReducer } from './customer-state-store/customer.reducer';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({cartEntries:cartReducer , customerEntries:customerReducer, cartIdEntry:cartIdReducer, updtCartEntries:updateProdQtyReducer}, {metaReducers:[metaReducerLocalStorage]}),
+    StoreModule.forRoot({cartEntries:cartReducer , customerEntries:customerReducer, cartIdEntry:cartIdReducer, updtCartEntries:updateProdQtyReducer, specificProductEntry:specificProductReducer, filteredProductsEntry:filteredProductsReducer}, {metaReducers:[metaReducerLocalStorage]}),
     StarRatingModule
   ],
-  providers: [DatePipe, ComponentStore,StoreserviceService,ProductServiceService],
+  providers: [DatePipe, ComponentStore,ProductServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

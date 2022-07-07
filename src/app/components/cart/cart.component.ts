@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -7,6 +8,7 @@ import { cartId, clearCart, removeProduct, removeUpdatedQtyProd } from 'src/app/
 import { updateProdQtyReducer } from 'src/app/cart-state-store/cart.reducer';
 import { productsCount, selectCartId, selectGroupedCartEntries, selectUpdtQtyCartEntries } from 'src/app/cart-state-store/cart.selector';
 import { selectCustomer } from 'src/app/customer-state-store/customer.selector';
+import { Address } from 'src/app/EntityModels/Address';
 import { Cart } from 'src/app/EntityModels/Cart';
 import { Customer } from 'src/app/EntityModels/Customer';
 import { OrderEntity} from 'src/app/EntityModels/OrderEntity';
@@ -14,6 +16,7 @@ import { OrderProducts } from 'src/app/EntityModels/OrderProducts';
 import { Product } from 'src/app/EntityModels/Product';
 import { CartserviceService } from 'src/app/services_folder/cartservice.service';
 import { ProductServiceService } from 'src/app/services_folder/product-service.service';
+import { UserServiceService } from 'src/app/services_folder/userService.service';
 import * as uuid from 'uuid'
 
 @Component({
@@ -22,13 +25,24 @@ import * as uuid from 'uuid'
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
+  cardForm=new UntypedFormGroup({
+    cardNo: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9-]{19}")],),
+    cvv: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9]{3}")],),
+    expiryDate: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9/]{5}")],),
+    holderName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z0-9 ]+$')])
+  })
 
-  constructor(private store: Store, private router:Router, private cartService:CartserviceService, private productService:ProductServiceService) {
+  upiForm=new UntypedFormGroup({
+    upiAddress:new UntypedFormControl('',[Validators.required,Validators.pattern('^[a-zA-Z0-9@ ]+$')])
+  })
+
+  constructor(private store: Store, private router:Router, private cartService:CartserviceService, private productService:ProductServiceService, private userService:UserServiceService) {
     this.store.select(selectGroupedCartEntries).subscribe({
       next:(data)=>this.cartProducts=data
     })
     this.store.select(selectCustomer).subscribe({
-      next:(data)=> this.custId=data[0].custId
+      next:(data)=> {this.custId=data[0].custId,
+        this.updateAddressDetails()}
     }) 
     this.cartService.getcartId(this.custId).subscribe({
       next:(data)=>this.cartId=data
@@ -49,6 +63,7 @@ export class CartComponent implements OnInit {
     this.invoiceNum=this.generateInvoiceNum()
     this.validateProducts()
     
+    
    }
 
    ngOnInit(): void {
@@ -58,6 +73,7 @@ export class CartComponent implements OnInit {
   custId:number=0;
   cartId:number=0;
   orderProductsList:OrderProducts[]=[];
+  addressesList:Address[]=[];
   checkoutAmount:number= 0;
   invoiceNum:string="";
   orderAmount:number= 0;
@@ -66,7 +82,56 @@ export class CartComponent implements OnInit {
   isCartHavingItems:boolean=true;
   lengthOfCartProducts:number=0;
   deliveryCharges:number=0;
+  addressIdOfCust:number=0;
   isCartCheckOut:boolean=true;
+  isCardClicked:boolean=true;
+  isCardSubmitted:boolean=false;
+  isPayemtClicked:boolean=false;
+  upiPaymentsClicked:boolean=true;
+  isUpiSubmitted:boolean=false;
+  isAddressSelected:boolean=false;
+  //newCust:boolean=true;
+  upi:string="UPI"
+  card:string="CARD"
+
+  get cardCon(){
+    return this.cardForm.controls;
+  }
+
+  get upiCon(){
+    return this.upiForm.controls;
+  }
+
+  updateAddressDetails(){
+    this.userService.getCustAddresses(this.custId).subscribe({
+      next:(data:any)=>{this.addressesList=data}
+    })
+  }
+
+  // validateAddress(){
+  //   if(this.addressesList.length===0){
+  //     this.newCust=false
+  //     this.isAddressSelected=true
+  //   }else{
+  //     this.newCust=true
+  //   }
+  // }
+
+  clickedOnCard(){
+    this.isCardClicked=false
+    this.upiPaymentsClicked=true;
+  }
+  clickedOnUpiPayments(){
+    this.isCardClicked=true
+    this.upiPaymentsClicked=false;
+  }
+  
+  setAddressId(id:number){
+    this.addressIdOfCust=id
+    this.isAddressSelected=true
+    this.isPayemtClicked=true;
+  }
+
 
   generateInvoiceNum():string{
     let invoiceNum=uuid.v4()
@@ -103,6 +168,9 @@ export class CartComponent implements OnInit {
 
   goToHome(){
     this.router.navigate(['/home'])
+  }
+  goToUserProfile(){
+    this.router.navigate(['/user-profile'])
   }
 
 
@@ -167,12 +235,10 @@ export class CartComponent implements OnInit {
               this.orderAmount-=(e1.productPrice)
               this.calculateOrderDisc()
               this.checkoutAmount=this.orderAmount-(this.orderDiscount+this.deliveryCharges)
-            }
-            
+            }           
           }
         })
-      }
-      
+      }  
     });
   }
 
@@ -196,17 +262,39 @@ export class CartComponent implements OnInit {
     });
   }
 
-  checkOut(){
-    this.reduceQuantity();
-    this.isCartCheckOut=false
-    const checkOutOrder:OrderEntity[]=[];
-    checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList))
-    const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)
-    this.cartService.createCart(checkoutCart).subscribe({
-      next:(data:any) => {console.log(data),this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
-        this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
-    })
+  checkOut(value:string){
+    if(value===this.card){
+      this.isCardSubmitted=true;
+      if(this.cardForm.valid){
+        this.reduceQuantity();
+        this.isCartCheckOut=false
+        const checkOutOrder:OrderEntity[]=[];
+        checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList,this.addressIdOfCust))
+        const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)
+        this.cartService.createCart(checkoutCart).subscribe({
+        next:(data:any) => {this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
+            this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
+        })
+        }else{
+          alert("Enter Correct card details")
+        }
+    }
+    if(value===this.upi){
+        this.isUpiSubmitted=true;
+        console.log(this.upiForm.valid)
+        if(this.upiForm.valid){
+        this.reduceQuantity();
+        this.isCartCheckOut=false
+        const checkOutOrder:OrderEntity[]=[];
+        checkOutOrder.push(new OrderEntity(this.checkoutAmount,this.invoiceNum,this.orderAmount,this.orderDate,this.orderDiscount,0,this.orderProductsList,this.addressIdOfCust))
+        const checkoutCart = new Cart(this.cartId,this.custId,checkOutOrder)
+        this.cartService.createCart(checkoutCart).subscribe({
+        next:(data:any) => {this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
+            this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
+        })
+        }else{
+          alert("UPI address is not valid")
+        }
+    }
   }
-
-
 }

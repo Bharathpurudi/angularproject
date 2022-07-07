@@ -11,6 +11,7 @@ import { ProductServiceService } from 'src/app/services_folder/product-service.s
 import { specifcProduct } from 'src/app/cart-state-store/cart.actions';
 import { Router } from '@angular/router';
 import { Address } from 'src/app/EntityModels/Address';
+import { OrderEntity } from 'src/app/EntityModels/OrderEntity';
 
 @Component({
   selector: 'app-userprofile',
@@ -37,9 +38,11 @@ export class UserprofileComponent implements OnInit {
     state: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
     pincode: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9]{6}")],)
   })
+
+
   submitted:boolean=false;
   addressSubmitted:boolean=false;
-  isAddAddressChecked:boolean=true;
+  isAddAddressChecked:boolean=false;
   password:string="";
   newPassword:string="";
   isPasswordMatched:boolean=false;
@@ -50,10 +53,11 @@ export class UserprofileComponent implements OnInit {
   isEditChecked:boolean=true;
   toggleTabs:boolean=false;
   clickedOnAddress:boolean=true;
-  clickedOnPerProfile:boolean=false;
-  clickedOnOrders:boolean=true;
+  clickedOnPerProfile:boolean=true;
+  clickedOnOrders:boolean=false;
   productsList:Product[]=[];
   addressesList:Address[]=[];
+  newCust:boolean=false;
 
   editedCustomer:any={
     custId:0,
@@ -76,9 +80,7 @@ export class UserprofileComponent implements OnInit {
     this.productService.getAllProducts().subscribe({
       next:(data:any)=>{this.productsList=data}
     })
-    this.userService.getCustAddresses(this.customer.custId).subscribe({
-      next:(data:any)=>{this.addressesList=data}
-    })
+    this.updateAddressDetails()
    }
 
   ngOnInit(): void {
@@ -90,9 +92,7 @@ export class UserprofileComponent implements OnInit {
 
   get addForm(){
     return this.addressForm.controls;
-
   }
-
 
 
  getCartId(){
@@ -103,8 +103,14 @@ export class UserprofileComponent implements OnInit {
 
  getCustCart(){
   this.cartService.getCartOfCustomer(this.cartId).subscribe({
-    next:(data:any)=>{this.cart=data}
+    next:(data:any)=>{this.cart=data, console.log(data)}
   })
+ }
+
+ validateCustCart(data:any){
+  if(data==undefined){
+    this.newCust=true;
+  }
  }
  onCheckOfEdit(e:any){
    if(e.target.checked===true){
@@ -120,6 +126,7 @@ export class UserprofileComponent implements OnInit {
     this.isAddAddressChecked=true
    }
  }
+ 
   onEnterPassword(e: any) {
     this.password = e.target.value
   }
@@ -136,17 +143,39 @@ export class UserprofileComponent implements OnInit {
     }
   }
 
+  validateCheckBox(){
+    const checkbox = document.getElementById('addressCheckBox',) as HTMLInputElement | null;
+    if(checkbox!=null){
+      checkbox.checked=false
+    }
+  }
+
+  updateAddressDetails(){
+    this.userService.getCustAddresses(this.customer.custId).subscribe({
+      next:(data:any)=>{this.addressesList=data,console.log(data)}
+    })
+  }
+
   addAddress(){
     this.addressSubmitted=true;
+    console.log("djgfhgfhgfh1")
     if(this.addressForm.valid){
-      console.log(this.addressForm.value)
-      console.log(this.customer)
+      console.log("djgfhgfhgfh")
       this.custAddress=new Address(0,this.addressForm.value.city,this.customer.custId,this.addressForm.value.doorNo,this.addressForm.value.pincode,this.addressForm.value.state,this.addressForm.value.streetName);
+      this.validateCheckBox()
+      this.isAddAddressChecked=true
       this.userService.addCustAddress(this.custAddress).subscribe({
-        next:(data:any)=>{console.log(data)}
+        next:(data:any)=>this.updateAddressDetails()
       })
-      
     }
+  }
+
+  
+
+  deleteUserAddress(id:number){
+    this.userService.deleteCustAddress(id).subscribe({
+      next:(data:any)=>{this.updateAddressDetails(),window.location.reload()}
+    })
   }
 
   save() {
@@ -163,7 +192,7 @@ export class UserprofileComponent implements OnInit {
     this.clickedOnAddress=true
     this.clickedOnOrders=true
     this.clickedOnPerProfile=false
-    this.isAddAddressChecked=true
+    this.isAddAddressChecked=false
   }
   onClickOnOrders(){
     this.clickedOnOrders=false
@@ -175,7 +204,6 @@ export class UserprofileComponent implements OnInit {
     this.clickedOnOrders=true
     this.clickedOnPerProfile=true
     this.clickedOnAddress=false;
-
   }
 
   goToSpecificProductPage(id:number){
@@ -183,6 +211,10 @@ export class UserprofileComponent implements OnInit {
     this.store.dispatch(specifcProduct(tempProdList[0]))
     this.router.navigate(['/specificproduct'])
   }
+
+  downloadInvoice(order:OrderEntity) {  
+    
+  }  
 
 
 

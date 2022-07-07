@@ -31,10 +31,22 @@
                 <p class="cart-product-name">Uh.. Uhooo..Your Cart is Empty</p>
                 <p class="product-quantity">Add items to cart</p>
                 <button class="remove-button" (click)="goToHome()">Shop now</button>
-            </div>
-            
+            </div>       
         </div>
         <div class="cart-checkout-container">
+            <!-- <div class="addresses-container" [hidden]="newCust">
+                <h1 class="label-3">Add new address to checkout</h1>
+                <button class="login-button" (click)="goToUserProfile()">Add address</button>
+            </div> -->
+            <div class="addresses-container" [hidden]="isAddressSelected">
+                <h1 class="label-3" >Select Address for delivery</h1>
+                <ul class="unordered-list" *ngFor="let address of addressesList">
+                    <li class="addresses-list" (click)="setAddressId(address.addressId)">
+                        {{address.doorNo}}, {{address.streetName}}, {{address.city}}, {{address.state}}, {{address.pincode}}
+                    </li>
+                </ul>
+            </div>
+           <div [hidden]="!isPayemtClicked">
             <h1 class="checkout-price-heading">Price Details</h1>
             <hr>
             <div class="checkout-deatails-con">
@@ -54,7 +66,93 @@
                 <p class="checkout-price-details">Payable Amount</p>
                 <p class="checkout-price-details1">{{checkoutAmount}}</p>
             </div>
-            <button class="checkout-button" (click)="checkOut()" [hidden]="!isCartHavingItems" >Checkout</button>
+            </div>
+            <div [hidden]="!isPayemtClicked" class="payment-container">
+                <div class="payment-container">
+                    <h1 class="label-3">Payment Options</h1>
+                    <ul class="unordered-list">
+                        <li (click)="clickedOnCard()"> 
+                            <p class="label">Credit/Debit card</p>
+                            <div class="credit-card" [hidden]="isCardClicked">
+                                <form class="signup-form" [formGroup]="cardForm" >
+                                    <div class="form-group-2">
+                                        <label class="label-2">
+                                            Card No:
+                                        </label>
+                                        <input type="text" formControlName="cardNo" class="cardNo-input-element" placeholder="1234-1234-1234-1234"
+                                            [ngClass]="{ 'is-invalid': isCardSubmitted && cardCon['cardNo'].errors }" />
+                                        <div *ngIf="isCardSubmitted && cardCon['cardNo'].errors" class="invalid-feedback">
+                                            <div *ngIf="cardCon['cardNo'].errors['required']">Card No Required</div>
+                                        </div>
+                                    </div>
+                                    <div class="cvv-expiry-container">
+                                        <div class="form-group-2">
+                                            <label class="label-2">
+                                                CVV:
+                                            </label>
+                                            <input type="password" formControlName="cvv" class="cvv-input-element" placeholder="123"
+                                                [ngClass]="{'is-invalid': isCardSubmitted && cardCon['cvv'].errors }"/>
+                                            <div *ngIf="isCardSubmitted && cardCon['cvv'].errors" class="invalid-feedback">
+                                                <div *ngIf="cardCon['cvv'].errors['required']">Cvv is required</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group-2">
+                                            <label class="label-2">
+                                               Expiry Date:
+                                            </label>
+                                            <input type="text" formControlName="expiryDate" class="cvv-input-element"
+                                                placeholder="01/25"  
+                                                [ngClass]="{'is-invalid': isCardSubmitted && cardCon['expiryDate'].errors }" />
+                                            <div *ngIf="isCardSubmitted && cardCon['expiryDate'].errors" class="invalid-feedback">
+                                                <div *ngIf="cardCon['expiryDate'].errors['required']">Expiry date is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group-2">
+                                        <label for="mobilenum-input" class="label-2">
+                                            Card Holder Name:
+                                        </label>
+                                        <input type="text" class="cardNo-input-element" formControlName="holderName"
+                                            placeholder="Ex: Bharath Purudi"
+                                            [ngClass]="{'is-invalid': isCardSubmitted && cardCon['holderName'].errors }" />
+                                        <div *ngIf="isCardSubmitted && cardCon['holderName'].errors" class="invalid-feedback">
+                                            <div *ngIf="cardCon['holderName'].errors['required']">Name is required.</div>
+                                        </div>
+                                    </div>
+                                        <button class="login-button" (click)="checkOut(card)">
+                                            Pay & Checkout
+                                        </button>
+                                </form>
+                                
+                            </div>
+                        </li>
+                        <li (click)="clickedOnUpiPayments()">
+                            <p class="label">UPI Payments</p>
+                            <div [hidden]="upiPaymentsClicked">
+                                <div class="upi-container">
+                                    <img src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1656066340/upi_payment_l8xk9y.png" class="upi-image" alt="upi"/>
+                                    <form [formGroup]="upiForm" >
+                                        <div class="form-group-2">
+                                            <label class="label-2">
+                                                UPI Address:
+                                            </label>
+                                            <input type="text" formControlName="upiAddress" class="upi-input-element" placeholder="bharathpurudi@ybl"
+                                                [ngClass]="{ 'is-invalid': isUpiSubmitted && upiCon['upiAddress'].errors }" />
+                                            <div *ngIf="isUpiSubmitted && upiCon['upiAddress'].errors" class="invalid-feedback">
+                                                <div *ngIf="upiCon['upiAddress'].errors['required']">UPI address is not valid</div>
+                                            </div>
+                                        </div>
+                                        <button class="login-button" (click)="checkOut(upi)">
+                                            Pay & Checkout
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
         </div>
-    </div>
+        </div>
 </div>

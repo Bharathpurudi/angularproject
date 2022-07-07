@@ -53,7 +53,9 @@ export class UsersignupformComponent implements OnInit {
 
 
   save() {
-    this.userService.createCustomer(this.customer).subscribe((data:any)=>{console.log(data)})
+    this.userService.createCustomer(this.customer).subscribe({
+      next:(data:any)=>{ console.log(data)}
+    })
   }
 
   onEnterPassword(e: any) {
@@ -88,7 +90,8 @@ export class UsersignupformComponent implements OnInit {
       this.hashedPassword= bcrypt.hashSync(this.customer.password,this.salt);
       this.customer.password=this.hashedPassword;
       this.save();
-      this.goToLoginPage();
+      this.goToLoginPage()
+      
     } else {
       alert('User form is not valid!!')
     }

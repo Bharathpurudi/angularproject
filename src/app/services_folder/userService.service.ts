@@ -36,4 +36,12 @@ export class UserServiceService {
     return this.http.get(`${this.baseUrl}/getaddressesofcust/${id}`)
   }
 
+  deleteCustAddress(id:number):Observable<any>{
+    return this.http.delete(`${this.baseUrl}/deleteaddress/${id}`)
+  }
+
+  updateCustPassword(name:string,pass:string,val:any):Observable<any>{
+    return this.http.put(`${this.baseUrl}/updatepassword/${name}/${pass}`,val)
+  }
+
 }

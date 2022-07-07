@@ -210,20 +210,20 @@
         
                 </form>
             </div>
-            <div [hidden]="!isAddAddressChecked">
-                <ul *ngFor="let address of addressesList ; index as i" class="addresses-list">
+            <div [hidden]="!isAddAddressChecked" class="addresses-list">
+                <ul *ngFor="let address of addressesList ; index as i" >
                     <li class="address-list-element">
                         <div class="delete-address-container">
-                            <p class="address-title">Address {{i}}</p>
-                            <button class="delete-address-button">
+                            <p class="address-title">Address {{i+1}}</p>
+                            <button class="delete-address-button" (click)="deleteUserAddress(address.addressId)">
                                 <i class="bi bi-trash3 trash-class"></i>
                             </button>
                         </div>
-                        <p class="welcome-msg">Door No: {{address.doorNo}}</p>
-                        <p class="welcome-msg">Street Name: {{address.streetName}}</p>
-                        <p class="welcome-msg">City: {{address.city}}</p>
-                        <p class="welcome-msg">State: {{address.state}}</p>
-                        <p class="welcome-msg">Pincode: {{address.pincode}}</p>
+                        <p class="address-detail">Door No: {{address.doorNo}}</p>
+                        <p class="address-detail">Street Name: {{address.streetName}}</p>
+                        <p class="address-detail">City: {{address.city}}</p>
+                        <p class="address-detail">State: {{address.state}}</p>
+                        <p class="address-detail">Pincode: {{address.pincode}}</p>
                     </li>
                 </ul>
             </div>

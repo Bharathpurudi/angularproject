@@ -1,6 +1,6 @@
 
 <div class="loginpage-bg-container">
-  <div class="login-form-container">
+  <div class="login-form-container" [hidden]="isForgotPasswordClicked">
     <img
       src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1652696237/kisspng-e-commerce-computer-icons-shopping-cart-software-o-shopping-cart-5ac7d129bef211.9922103615230446497821_l1nzdt.png"
       alt="website logo"
@@ -39,16 +39,61 @@
           Show Password
         </label>
       </div>
+      <p class="error-msg">{{state.errorMsg}}</p>
       <div class="button-container">
         <button class="login-button" >
           Login
         </button>
       </div>
       
-      <p class="error-msg">{{state.errorMsg}}</p>
+      
       <div class="signup-container">
-        <p class="label">Forgot Password</p>
-        <a class="label-anchor " (click)="goToSignUp()">Not a member yet? SignUp! </a>
+        <a class="label-anchor" (click)="forgotPassword()">Forgot Password</a>
+        <a class="label-anchor" (click)="goToSignUp()">Not a member yet? SignUp! </a>
+      </div>
+    </form>
+  </div>
+  <div class="login-form-container" [hidden]="!isForgotPasswordClicked">
+    <img
+      src="https://res.cloudinary.com/dhyg2tdfb/image/upload/v1652696237/kisspng-e-commerce-computer-icons-shopping-cart-software-o-shopping-cart-5ac7d129bef211.9922103615230446497821_l1nzdt.png"
+      alt="website logo"
+      class="website-logo"
+    />
+    <form class="login-form">
+      <label for="update-username-input" class="label">
+        USERNAME
+      </label>
+      <input
+        type="text"
+        class="login-input-element"
+        name="update-username-input"
+        placeholder="Username"
+        required [(ngModel)] = "updateState.updateUserName"
+        
+      />
+      <label class="label" for="update-password-input">
+         NEW PASSWORD
+      </label>
+      <input
+        type="password"
+        class="login-input-element"
+        name="update-password-input"
+        placeholder="Password" required [(ngModel)] = "updateState.newPassword"
+      />
+      <label class="label" for="confirm-password-input">
+        CONFIRM NEW PASSWORD
+     </label>
+     <input
+       type="password"
+       class="login-input-element"
+       name="confirm-password-input"
+       placeholder="Confirm Password" required [(ngModel)] = "updateState.confirmPassword"
+     />
+     <p class="error-msg">{{state.errorMsg}}</p>
+      <div class="button-container">
+        <button class="login-button" (click)="updatePassword()"  >
+          Update Password
+        </button>
       </div>
     </form>
   </div>

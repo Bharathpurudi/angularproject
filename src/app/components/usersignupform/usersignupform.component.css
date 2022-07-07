@@ -9,13 +9,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #424a5c;
+    background-color: #000000;
     border-radius: 10px;
     width: 40vw;
     padding-top: 25px;
     padding-bottom: 25px;
     margin-top: 50px;
     margin-bottom: 50px;
+    border: 1px solid #ffffff;
   }
   .signup-heading {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,

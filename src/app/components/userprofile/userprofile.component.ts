@@ -22,7 +22,7 @@ export class UserprofileComponent implements OnInit {
   customer:Customer=new Customer;
   custAddress!: Address;
   editForm = new UntypedFormGroup({
-    firstName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+    firstName: new UntypedFormControl("", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
     lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
     mailId: new UntypedFormControl('', [Validators.required, Validators.email]),
     oldPassword: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
@@ -75,7 +75,7 @@ export class UserprofileComponent implements OnInit {
 
   constructor(private store:Store,private router: Router, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
     this.store.select(selectCustomer).subscribe({
-      next:(data:any)=>{this.customer=data[0],this.getCartId()}
+      next:(data:any)=>{this.customer=data[0]}
     })
     this.productService.getAllProducts().subscribe({
       next:(data:any)=>{this.productsList=data}
@@ -84,6 +84,13 @@ export class UserprofileComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.getCartId();
+    this.editForm.patchValue({
+      firstName:this.customer.firstName,
+      lastName:this.customer.lastName,
+      mailId:this.customer.mailId,
+      mobileNum:this.customer.mobileNum
+    })
   }
 
   get form() {
@@ -95,14 +102,16 @@ export class UserprofileComponent implements OnInit {
   }
 
 
+
+
  getCartId(){
    this.cartService.getcartId(this.customer.custId).subscribe({
-     next:(data:any)=>{this.cartId=data,this.getCustCart()}
+     next:(data:any)=>{this.getCustCart(data)}
    })
  }
 
- getCustCart(){
-  this.cartService.getCartOfCustomer(this.cartId).subscribe({
+ getCustCart(id:number){
+  this.cartService.getCartOfCustomer(id).subscribe({
     next:(data:any)=>{this.cart=data, console.log(data)}
   })
  }
@@ -156,11 +165,22 @@ export class UserprofileComponent implements OnInit {
     })
   }
 
+  editUserAddress(id:any){
+    const modifyingAddress:Address[]=this.addressesList.filter(e=>e.addressId===id);
+    this.isAddAddressChecked=false
+    this.addressForm.patchValue({
+      doorNo:modifyingAddress[0].doorNo,
+      streetName:modifyingAddress[0].streetName,
+      city:modifyingAddress[0].city,
+      state:modifyingAddress[0].state,
+      pincode:modifyingAddress[0].pincode
+    })
+
+  }
+
   addAddress(){
     this.addressSubmitted=true;
-    console.log("djgfhgfhgfh1")
     if(this.addressForm.valid){
-      console.log("djgfhgfhgfh")
       this.custAddress=new Address(0,this.addressForm.value.city,this.customer.custId,this.addressForm.value.doorNo,this.addressForm.value.pincode,this.addressForm.value.state,this.addressForm.value.streetName);
       this.validateCheckBox()
       this.isAddAddressChecked=true

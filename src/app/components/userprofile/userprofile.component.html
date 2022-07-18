@@ -215,9 +215,14 @@
                     <li class="address-list-element">
                         <div class="delete-address-container">
                             <p class="address-title">Address {{i+1}}</p>
-                            <button class="delete-address-button" (click)="deleteUserAddress(address.addressId)">
-                                <i class="bi bi-trash3 trash-class"></i>
-                            </button>
+                            <div class="add-btn-container">
+                                <button class="delete-address-button" (click)="deleteUserAddress(address.addressId)">
+                                    <i class="bi bi-trash3 trash-class"></i>
+                                </button>
+                                <button class="delete-address-button" (click)="editUserAddress(address.addressId)">
+                                    <i class="bi bi-pencil-fill trash-class"></i>
+                                </button>
+                            </div>
                         </div>
                         <p class="address-detail">Door No: {{address.doorNo}}</p>
                         <p class="address-detail">Street Name: {{address.streetName}}</p>

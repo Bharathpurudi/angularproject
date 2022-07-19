@@ -106,7 +106,7 @@ export class UserprofileComponent implements OnInit {
 
  getCartId(){
    this.cartService.getcartId(this.customer.custId).subscribe({
-     next:(data:any)=>{this.getCustCart(data)}
+     next:(data:any)=>{this.getCustCart(data), console.log(data)}
    })
  }
 

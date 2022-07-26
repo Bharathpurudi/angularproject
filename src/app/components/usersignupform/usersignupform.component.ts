@@ -28,7 +28,7 @@ export class UsersignupformComponent implements OnInit {
   salt = bcrypt.genSaltSync(10);
 
 
-  currentDate = new Date();
+  currentDate = new Date(); 
   minDateRaw = new Date().setDate(this.currentDate.getDate() - 36500);
   minDate = new Date(this.minDateRaw).toLocaleDateString()
   formattedMinDate = this.datePipe.transform(this.minDate, 'yyyy-MM-dd');

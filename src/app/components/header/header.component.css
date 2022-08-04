@@ -28,6 +28,7 @@
     align-items: center;
     justify-content: space-between;
     height: 35px;
+    margin-top: 10px;
 
   }
   .link-item {
@@ -97,6 +98,7 @@
     border-style: none;
     border-radius: 10px;
     margin-right: 50px;
-    padding: 5px;
+    padding: 8px;
+    
   }
   

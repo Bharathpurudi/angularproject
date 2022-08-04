@@ -37,8 +37,8 @@ export class UsersignupformComponent implements OnInit {
   formattedMaxDate = this.datePipe.transform(this.maxDate, 'yyyy-MM-dd');
 
   signUpForm = new UntypedFormGroup({
-    firstName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-    lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+    firstName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+    lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
     gender: new UntypedFormControl(''),
     userName: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
     mailId: new UntypedFormControl('', [Validators.required, Validators.email]),
@@ -90,6 +90,7 @@ export class UsersignupformComponent implements OnInit {
       this.hashedPassword= bcrypt.hashSync(this.customer.password,this.salt);
       this.customer.password=this.hashedPassword;
       this.save();
+      alert("User Created Sucessfully")
       this.goToLoginPage()
       
     } else {

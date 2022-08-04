@@ -119,7 +119,7 @@
                                             <div *ngIf="cardCon['holderName'].errors['required']">Name is required.</div>
                                         </div>
                                     </div>
-                                        <button class="login-button" (click)="checkOut(card)">
+                                        <button class="login-button" (click)="checkOut(card)" [disabled]="isPaymentButtonDisabled">
                                             Pay & Checkout
                                         </button>
                                 </form>
@@ -142,7 +142,7 @@
                                                 <div *ngIf="upiCon['upiAddress'].errors['required']">UPI address is not valid</div>
                                             </div>
                                         </div>
-                                        <button class="login-button" (click)="checkOut(upi)">
+                                        <button class="login-button" (click)="checkOut(upi)" [disabled]="isPaymentButtonDisabled">
                                             Pay & Checkout
                                         </button>
                                     </form>

@@ -34,6 +34,7 @@ export class HeaderComponent implements OnInit {
     this.store.dispatch(removeCustomer())
     this.cookies.delete('jwt_token')
     window.localStorage.clear();
+    window.location.reload();
   }
 
   homePage(){

@@ -189,7 +189,7 @@ border-radius: 1px;
 .credit-card{
     display: flex;
     flex-direction: column;
-    width:30vw;
+    width:25vw;
     align-items: flex-start;
     padding: 10px;
     border-radius: 5px;

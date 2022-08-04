@@ -12,6 +12,8 @@ import { specifcProduct } from 'src/app/cart-state-store/cart.actions';
 import { Router } from '@angular/router';
 import { Address } from 'src/app/EntityModels/Address';
 import { OrderEntity } from 'src/app/EntityModels/OrderEntity';
+import { ChangeDetectorRef } from '@angular/core';
+
 
 @Component({
   selector: 'app-userprofile',
@@ -22,8 +24,8 @@ export class UserprofileComponent implements OnInit {
   customer:Customer=new Customer;
   custAddress!: Address;
   editForm = new UntypedFormGroup({
-    firstName: new UntypedFormControl("", [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
-    lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z]+$')]),
+    firstName: new UntypedFormControl("", [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
+    lastName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
     mailId: new UntypedFormControl('', [Validators.required, Validators.email]),
     oldPassword: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
     newPassword: new UntypedFormControl('', [Validators.required, Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,15}')]),
@@ -36,7 +38,7 @@ export class UserprofileComponent implements OnInit {
     streetName: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
     city: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
     state: new UntypedFormControl('', [Validators.required, Validators.pattern('^[a-zA-Z ]+$')]),
-    pincode: new UntypedFormControl('', [Validators.required, Validators.pattern("[0-9]{6}")],)
+    pincode: new UntypedFormControl('', [Validators.required, Validators.pattern("^[0-9]{6}$")],)
   })
 
 
@@ -58,6 +60,7 @@ export class UserprofileComponent implements OnInit {
   productsList:Product[]=[];
   addressesList:Address[]=[];
   newCust:boolean=false;
+  isOrdersPresent:boolean=false;
 
   editedCustomer:any={
     custId:0,
@@ -73,24 +76,20 @@ export class UserprofileComponent implements OnInit {
 
   
 
-  constructor(private store:Store,private router: Router, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
+  constructor(private store:Store,private changeDetectorRefs: ChangeDetectorRef,private router: Router, private userService:UserServiceService,private productService:ProductServiceService ,private cartService:CartserviceService) {
     this.store.select(selectCustomer).subscribe({
       next:(data:any)=>{this.customer=data[0]}
     })
     this.productService.getAllProducts().subscribe({
       next:(data:any)=>{this.productsList=data}
     })
-    this.updateAddressDetails()
+    this.updateAddressDetails();
+    this.getCartId();
+    this.populateUserDetails();
    }
 
   ngOnInit(): void {
-    this.getCartId();
-    this.editForm.patchValue({
-      firstName:this.customer.firstName,
-      lastName:this.customer.lastName,
-      mailId:this.customer.mailId,
-      mobileNum:this.customer.mobileNum
-    })
+    this.updateAddressDetails();
   }
 
   get form() {
@@ -103,7 +102,14 @@ export class UserprofileComponent implements OnInit {
 
 
 
-
+ populateUserDetails(){
+  this.editForm.patchValue({
+    firstName:this.customer.firstName,
+    lastName:this.customer.lastName,
+    mailId:this.customer.mailId,
+    mobileNum:this.customer.mobileNum
+  })
+ }
  getCartId(){
    this.cartService.getcartId(this.customer.custId).subscribe({
      next:(data:any)=>{this.getCustCart(data), console.log(data)}
@@ -112,7 +118,12 @@ export class UserprofileComponent implements OnInit {
 
  getCustCart(id:number){
   this.cartService.getCartOfCustomer(id).subscribe({
-    next:(data:any)=>{this.cart=data, console.log(data)}
+    next:(data:any)=>{if(data!=null){
+      this.cart=data,
+      this.isOrdersPresent=true
+    }else{
+      this.isOrdersPresent=false
+    }}
   })
  }
 
@@ -161,7 +172,7 @@ export class UserprofileComponent implements OnInit {
 
   updateAddressDetails(){
     this.userService.getCustAddresses(this.customer.custId).subscribe({
-      next:(data:any)=>{this.addressesList=data,console.log(data)}
+      next:(data:any)=>{this.addressesList=data,this.changeDetectorRefs.detectChanges();}
     })
   }
 
@@ -185,7 +196,7 @@ export class UserprofileComponent implements OnInit {
       this.validateCheckBox()
       this.isAddAddressChecked=true
       this.userService.addCustAddress(this.custAddress).subscribe({
-        next:(data:any)=>this.updateAddressDetails()
+        next:(data:any)=>{this.updateAddressDetails()}
       })
     }
   }

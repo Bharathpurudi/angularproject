@@ -107,6 +107,10 @@ export class LoginpageComponent implements OnInit {
     }
   }
 
+  backToLogin(){
+    this.isForgotPasswordClicked=false;
+  }
+
   gotoHome() {
     this.router.navigate(['/home']);
   }

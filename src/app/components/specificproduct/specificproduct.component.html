@@ -19,8 +19,9 @@
             </div>
             <h1 class="description">Description: <span class="product-description">{{product.description}}</span></h1>
             <div class="add-cart-container">
-                <button class="add-cart-button" [hidden]="productAdded" (click)="addToCart(product.productId)">Add to Cart</button>
+                <button class="add-cart-button" [hidden]="productAdded" (click)="addToCart(product.productId)" [hidden]="!outOfStock">Add to Cart</button>
                 <button class="add-cart-button" [hidden]="!productAdded" (click)="goToCart()">Go to Cart</button>
+                <button class="add-cart-button" [hidden]="!productAdded" (click)="goToHome()">Add more products</button>
                 <button class="add-cart-button" [hidden]="outOfStock">Out Of Stock</button>
             </div>
         </div>

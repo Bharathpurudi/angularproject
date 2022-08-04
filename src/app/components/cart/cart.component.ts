@@ -90,6 +90,7 @@ export class CartComponent implements OnInit {
   upiPaymentsClicked:boolean=true;
   isUpiSubmitted:boolean=false;
   isAddressSelected:boolean=false;
+  isPaymentButtonDisabled:boolean=false;
   //newCust:boolean=true;
   upi:string="UPI"
   card:string="CARD"
@@ -127,9 +128,13 @@ export class CartComponent implements OnInit {
   }
   
   setAddressId(id:number){
-    this.addressIdOfCust=id
+    if(this.cartProducts.length!=0){
+      this.addressIdOfCust=id
     this.isAddressSelected=true
     this.isPayemtClicked=true;
+    }else{
+      alert("Add Items to cart to proceed")
+    }
   }
 
 
@@ -206,6 +211,9 @@ export class CartComponent implements OnInit {
     }
   }
     this.validateProducts();
+    if(this.cartProducts.length==0){
+      this.isPayemtClicked=false;
+    }
   }
 
   validateProducts(){
@@ -275,9 +283,12 @@ export class CartComponent implements OnInit {
         next:(data:any) => {this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
             this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
         })
+        this.cardForm.disable()
+        this.isPaymentButtonDisabled=true;
         }else{
           alert("Enter Correct card details")
         }
+        
     }
     if(value===this.upi){
         this.isUpiSubmitted=true;
@@ -292,9 +303,12 @@ export class CartComponent implements OnInit {
         next:(data:any) => {this.clearCart(),this.orderProductsList=[],this.orderAmount=0,
             this.calculateOrderDisc(),this.deliveryCharges=0,this.checkoutAmount=0},
         })
+        this.upiForm.disable();
+        this.isPaymentButtonDisabled=true;
         }else{
           alert("UPI address is not valid")
         }
+
     }
   }
 }

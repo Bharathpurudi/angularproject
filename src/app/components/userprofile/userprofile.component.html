@@ -12,8 +12,8 @@
             <div class="account-settings">
                 <ul class="account-settings-list">
                     <li class="account-settings-list-element"  (click)="onClickOnUserProfileEdit()">Edit Personal Details</li>
-                    <li class="account-settings-list-element" (click)="onClickOnOrders()" >Orders</li>
                     <li class="account-settings-list-element" (click)="onClickOnAdresses()">Addresses</li>
+                    <li class="account-settings-list-element" (click)="onClickOnOrders()" >Orders</li>
                 </ul>
             </div>
         </div>
@@ -110,31 +110,6 @@
                 </form>
             </div>
            </div>
-           <div [hidden]="clickedOnOrders">
-               <div class="orders-container">
-                   <h1 class="label-1">Voila..! Here your orders</h1>
-                <ul class="account-settings-list-1" *ngFor="let order of cart.orderEntities">
-                    <li class="order-details">
-                        <p class="label">Order Id: {{order.orderId}}</p>
-                        <p class="label">Order Date: {{order.orderDate}}</p>
-                        <p class="label">Order Amount: {{order.orderAmount}}</p>
-                    </li>
-                    <div class="account-settings-list-2">
-                        <ul class="account-settings-list" *ngFor="let orderProduct of order.orderProducts" >
-                            <div *ngFor="let product of productsList">
-                                <li class="order-item-list-item" *ngIf="product.productId==orderProduct.productId">
-                                        <img src={{product.imageUrl}} class="prod-image" (click)="goToSpecificProductPage(product.productId)"/>
-                                    <div class="product-name-qty-cont">
-                                        <p class="label-2">{{product.productName}}</p>
-                                        <p class="label-2">Qty: {{orderProduct.quantity}}</p>
-                                    </div>
-                                </li>
-                            </div>
-                        </ul>
-                    </div>
-                </ul>
-               </div>
-           </div>
            <div [hidden]="clickedOnAddress">
             <div class="personal-details-edit">
                 <p class="label-1">User adresses</p>
@@ -195,7 +170,7 @@
                             Pincode:
                         </label>
                         <input type="number" class="login-input-element" formControlName="pincode"
-                            placeholder="Ex: 515865"
+                            placeholder="Enter 6 Digit Pincode" size="6" maxlength="6"
                             [ngClass]="{'is-invalid': addressSubmitted && addForm['pincode'].errors }" />
                         <div *ngIf="addressSubmitted && addForm['pincode'].errors" class="invalid-feedback">
                             <div *ngIf="addForm['pincode'].errors['required']">Pincode is required.</div>
@@ -232,6 +207,36 @@
                     </li>
                 </ul>
             </div>
+           </div>
+           <div [hidden]="clickedOnOrders">
+               <div class="orders-container">
+                <div [hidden]="isOrdersPresent">
+                    <h1 class="label-1">Uhhhh...hoo no orders here.</h1>
+                </div>
+                <div [hidden]="!isOrdersPresent">
+                    <h1 class="label-1">Voila..! Here your orders</h1>
+                <ul class="account-settings-list-1" *ngFor="let order of cart.orderEntities">
+                    <li class="order-details">
+                        <p class="label">Order Id: {{order.orderId}}</p>
+                        <p class="label">Order Date: {{order.orderDate}}</p>
+                        <p class="label">Order Amount: {{order.checkoutAmount}}</p>
+                    </li>
+                    <div class="account-settings-list-2">
+                        <ul class="account-settings-list" *ngFor="let orderProduct of order.orderProducts" >
+                            <div *ngFor="let product of productsList">
+                                <li class="order-item-list-item" *ngIf="product.productId==orderProduct.productId">
+                                        <img src={{product.imageUrl}} class="prod-image" (click)="goToSpecificProductPage(product.productId)"/>
+                                    <div class="product-name-qty-cont">
+                                        <p class="label-2">{{product.productName}}</p>
+                                        <p class="label-2">Qty: {{orderProduct.quantity}}</p>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </ul>
+                </div>
+               </div>
            </div>
         </div>
     </div>

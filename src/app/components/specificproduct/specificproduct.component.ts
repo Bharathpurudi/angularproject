@@ -86,6 +86,10 @@ export class SpecificproductComponent implements OnInit {
     this.router.navigate(['/cart']);
   }
 
+  goToHome(){
+    this.router.navigate(['/home']);
+  }
+
   addToCart(id:number){
     if(this.validateTheProduct(id)){
       alert("Product is already in the cart")
